@@ -7,7 +7,7 @@ import random
 # ===== 3 API SOURCES CONFIGURATION =====
 API_FOOTBALL_KEY = "ac0417c6e0dcfa236b146b9585892c9a"
 FOOTBALL_DATA_KEY = "901f0e15a0314793abaf625692082910"
-SPORTMONKS_KEY = "GDkPEhJTHCqSscTnlGu2j87eG3Gw77ECv25j0nbnKbER9Gx6Oj7e6XRud0oh"
+SPORTMONKS_KEY = "GDkPEhJTHCqSscTnlGu2j87eG3Gw77ECv25j0nbnKabER9Gx6Oj7e6XRud0oh"
 
 # API Endpoints
 API_SOURCES = {
@@ -47,10 +47,20 @@ SPORT_APIS = {
     'mma': 'v1.mma.api-sports.io'
 }
 
-SPORT_ICONS = {
-    'football': 'â˝', 'basketball': 'đ', 'nba': 'đ', 'hockey': 'đ',
-    'baseball': 'âž', 'nfl': 'đ', 'formula1': 'đď¸', 'handball': 'đ¤ž',
-    'rugby': 'đ', 'volleyball': 'đ', 'tennis': 'đž', 'mma': 'đĽ'
+# SPORT NAMES (NO EMOJI - ASCII SAFE)
+SPORT_NAMES = {
+    'football': '[FOOTBALL]',
+    'basketball': '[BASKETBALL]',
+    'nba': '[NBA]',
+    'hockey': '[HOCKEY]',
+    'baseball': '[BASEBALL]',
+    'nfl': '[NFL]',
+    'formula1': '[F1]',
+    'handball': '[HANDBALL]',
+    'rugby': '[RUGBY]',
+    'volleyball': '[VOLLEYBALL]',
+    'tennis': '[TENNIS]',
+    'mma': '[MMA]'
 }
 
 # AI MEMORY
@@ -148,7 +158,7 @@ def generate_signals(match_data):
             'algorithm': 'High Pressure Attack',
             'market': 'Over 2.5 Goals',
             'confidence': confidence,
-            'reasoning': f'Ekstremalna aktywnosc: {total_xg:.1f} xG',
+            'reasoning': 'Extreme offensive activity: {:.1f} xG'.format(total_xg),
             'accuracy_history': 84
         })
 
@@ -158,9 +168,9 @@ def generate_signals(match_data):
         confidence = min(90, int((79 + abs(home_xg - away_xg)) * learning_factor))
         signals.append({
             'algorithm': 'Momentum Domination',
-            'market': f'{favorite} Win',
+            'market': '{} Win'.format(favorite),
             'confidence': confidence,
-            'reasoning': f'Dominacja: {max(home_xg, away_xg):.1f} xG',
+            'reasoning': 'Domination: {:.1f} xG'.format(max(home_xg, away_xg)),
             'accuracy_history': 79
         })
 
@@ -171,7 +181,7 @@ def generate_signals(match_data):
             'algorithm': 'Late Game Intensity',
             'market': 'Next Goal',
             'confidence': confidence,
-            'reasoning': f"Koncowka: {minute}' + {total_xg:.1f} xG",
+            'reasoning': "Late surge: {}' + {:.1f} xG".format(minute, total_xg),
             'accuracy_history': 81
         })
 
@@ -184,7 +194,7 @@ def generate_signals(match_data):
             'algorithm': 'Expected Goals Deviation',
             'market': 'Over/Under Adjustment',
             'confidence': confidence,
-            'reasoning': f'Odchylenie xG: {goals} goli vs {total_xg:.1f} xG',
+            'reasoning': 'xG deviation: {} goals vs {:.1f} xG'.format(goals, total_xg),
             'accuracy_history': 82
         })
 
@@ -192,10 +202,10 @@ def generate_signals(match_data):
 
 # ===== API 1: API-FOOTBALL (PRIMARY) =====
 def fetch_api_football(sport='football'):
-    """Fetch from API-Football (v3.football.api-sports.io)"""
+    """Fetch from API-Football"""
     try:
         api_host = SPORT_APIS.get(sport, 'v3.football.api-sports.io')
-        url = f"https://{api_host}/fixtures"
+        url = "https://{}/fixtures".format(api_host)
 
         headers = {
             'x-rapidapi-host': api_host,
@@ -227,7 +237,7 @@ def fetch_api_football(sport='football'):
 
                 match_info = {
                     'id': fixture.get('id'),
-                    'source': f'{SPORT_ICONS.get(sport, "")} API-Football',
+                    'source': '{} API-Football'.format(SPORT_NAMES.get(sport, '[SPORT]')),
                     'league': league.get('name'),
                     'country': league.get('country'),
                     'home_team': home_team,
@@ -239,7 +249,7 @@ def fetch_api_football(sport='football'):
                 }
 
                 # Try to fetch statistics
-                stats_url = f"https://{api_host}/fixtures/statistics"
+                stats_url = "https://{}/fixtures/statistics".format(api_host)
                 stats_params = {'fixture': fixture.get('id')}
 
                 try:
@@ -274,14 +284,14 @@ def fetch_api_football(sport='football'):
 
             return {'success': True, 'matches': results, 'source': 'API-Football'}
 
-        return {'success': False, 'error': f'API-Football returned {response.status_code}'}
+        return {'success': False, 'error': 'API-Football returned {}'.format(response.status_code)}
 
     except Exception as e:
         return {'success': False, 'error': str(e)}
 
 # ===== API 2: FOOTBALL-DATA.ORG (FALLBACK 1) =====
 def fetch_football_data():
-    """Fetch from Football-Data.org (fallback API)"""
+    """Fetch from Football-Data.org"""
     try:
         url = "https://api.football-data.org/v4/matches"
 
@@ -306,7 +316,7 @@ def fetch_football_data():
             for match in matches[:10]:
                 match_info = {
                     'id': match.get('id'),
-                    'source': 'â˝ Football-Data.org',
+                    'source': '[FOOTBALL] Football-Data.org',
                     'league': match.get('competition', {}).get('name'),
                     'country': match.get('area', {}).get('name'),
                     'home_team': match.get('homeTeam', {}).get('name'),
@@ -333,16 +343,16 @@ def fetch_football_data():
 
             return {'success': True, 'matches': results, 'source': 'Football-Data.org'}
 
-        return {'success': False, 'error': f'Football-Data returned {response.status_code}'}
+        return {'success': False, 'error': 'Football-Data returned {}'.format(response.status_code)}
 
     except Exception as e:
         return {'success': False, 'error': str(e)}
 
 # ===== API 3: SPORTMONKS (FALLBACK 2) =====
 def fetch_sportmonks():
-    """Fetch from SportMonks (fallback API)"""
+    """Fetch from SportMonks"""
     try:
-        url = f"https://api.sportmonks.com/v3/football/livescores/inplay"
+        url = "https://api.sportmonks.com/v3/football/livescores/inplay"
 
         params = {
             'api_token': SPORTMONKS_KEY
@@ -376,7 +386,7 @@ def fetch_sportmonks():
 
                 match_info = {
                     'id': match.get('id'),
-                    'source': 'â˝ SportMonks',
+                    'source': '[FOOTBALL] SportMonks',
                     'league': match.get('league', {}).get('name', 'Unknown'),
                     'country': match.get('league', {}).get('country', {}).get('name', 'Unknown'),
                     'home_team': home_team,
@@ -403,7 +413,7 @@ def fetch_sportmonks():
 
             return {'success': True, 'matches': results, 'source': 'SportMonks'}
 
-        return {'success': False, 'error': f'SportMonks returned {response.status_code}'}
+        return {'success': False, 'error': 'SportMonks returned {}'.format(response.status_code)}
 
     except Exception as e:
         return {'success': False, 'error': str(e)}
@@ -550,7 +560,7 @@ class handler(BaseHTTPRequestHandler):
                         'success': True,
                         'timestamp': datetime.now().isoformat(),
                         'active_source': result.get('source', 'Unknown'),
-                        'sport': f"{SPORT_ICONS.get(sport, '')} {sport.title()}",
+                        'sport': '{} {}'.format(SPORT_NAMES.get(sport, '[SPORT]'), sport.title()),
                         'matches_found': len(filtered),
                         'results': filtered,
                         'ai_accuracy': min(95, ai_memory['best_accuracy'] + ai_memory['learning_iterations'] * 0.1),
@@ -563,7 +573,7 @@ class handler(BaseHTTPRequestHandler):
                     self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
                     return
 
-            raise Exception(f"No live {sport} matches from any API source")
+            raise Exception("No live {} matches from any API source".format(sport))
 
         except Exception as e:
             self.send_response(200)
@@ -574,7 +584,7 @@ class handler(BaseHTTPRequestHandler):
             error_response = {
                 'success': False,
                 'error': str(e),
-                'message': 'Brak live meczow. Najlepszy czas: 15:00-22:00 CEST',
+                'message': 'No live matches. Best time: 15:00-22:00 CEST',
                 'ai_accuracy': ai_memory.get('best_accuracy', 73),
                 'learning_status': 'Standby - Multi-API Ready',
                 'total_analyzed': ai_memory.get('total_predictions', 0),
