@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 AI Betting Genius - Ultimate Multi-Sport</title>
+    <title>⚽ AI Betting Genius - Ultimate 25+ Modules</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +12,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
             color: #fff;
@@ -27,305 +27,364 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            animation: fadeInDown 0.8s ease;
+            animation: fadeIn 0.8s ease-in;
         }
 
         .header h1 {
-            font-size: 3em;
-            font-weight: 900;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .header .subtitle {
-            font-size: 1.1em;
-            opacity: 0.95;
-            font-weight: 300;
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
-        .stats-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeInUp 0.8s ease 0.2s backwards;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.15);
+        .controls {
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            padding: 20px 30px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.25);
-            text-align: center;
-            flex: 1;
-            min-width: 200px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .stat-card .label {
-            font-size: 0.9em;
-            opacity: 0.85;
-            margin-bottom: 5px;
-        }
-
-        .stat-card .value {
-            font-size: 2em;
-            font-weight: 700;
-        }
-
-        .config-panel {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 25px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.25);
-            margin-bottom: 25px;
-            animation: fadeInUp 0.8s ease 0.4s backwards;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
 
-        .config-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        .control-group {
+            margin-bottom: 20px;
         }
 
-        .config-item label {
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
             display: block;
-            margin-bottom: 8px;
             font-weight: 600;
-            font-size: 0.95em;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
 
-        .config-item select,
-        .config-item input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            font-size: 1em;
-            transition: all 0.3s ease;
-        }
-
-        .config-item select:focus,
-        .config-item input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.6);
-        }
-
-        .config-item select option,
-        .config-item select optgroup {
-            background: #764ba2;
-            color: #fff;
-        }
-
-        .button-group {
-            display: flex;
+        .sport-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease 0.6s backwards;
+            margin-top: 15px;
         }
 
-        .btn {
-            flex: 1;
-            padding: 18px 35px;
-            border-radius: 15px;
-            border: none;
-            font-size: 1.1em;
-            font-weight: 700;
+        .sport-option {
+            position: relative;
+        }
+
+        .sport-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .sport-option label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sport-option input[type="radio"]:checked + label {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .sport-option label:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .confidence-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 60px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 10px;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
             text-transform: uppercase;
             letter-spacing: 1px;
-            min-width: 200px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.5);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.6);
+        .analyze-btn:active {
+            transform: translateY(0);
         }
 
-        .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.6);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
+        .analyze-btn:disabled {
+            opacity: 0.6;
             cursor: not-allowed;
-            transform: none !important;
+            transform: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .results {
-            animation: fadeInUp 0.8s ease 0.8s backwards;
+            display: grid;
+            gap: 20px;
         }
 
         .match-card {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.25);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease-out;
         }
 
-        .match-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .match-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
         .match-teams {
-            font-size: 1.5em;
+            font-size: 1.4rem;
             font-weight: 700;
+            color: #2d3748;
+        }
+
+        .match-info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #718096;
         }
 
         .confidence-badge {
+            display: inline-block;
             padding: 8px 16px;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 0.9em;
+            font-size: 1.1rem;
         }
 
         .confidence-high {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
         }
 
         .confidence-medium {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
         }
 
-        .confidence-low {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        .context-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
-        .signals-grid {
+        .context-badge {
+            padding: 6px 12px;
+            background: #edf2f7;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .signals {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 15px;
-            margin-top: 15px;
         }
 
-        .signal-card {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
+        .signal {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .signal-title {
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .signal-type {
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 1.1em;
         }
 
-        .signal-description {
-            font-size: 0.95em;
-            opacity: 0.9;
+        .signal-accuracy {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .signal-reasoning {
+            font-size: 0.95rem;
+            opacity: 0.95;
             line-height: 1.5;
         }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.5em;
-            animation: pulse 2s ease-in-out infinite;
+        .signal-algorithm {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            opacity: 0.8;
+            font-style: italic;
         }
 
         .error {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            color: #dc2626;
             padding: 20px;
             border-radius: 15px;
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            margin-bottom: 20px;
-        }
-
-        .sport-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 15px;
-            background: rgba(255,255,255,0.2);
-            font-size: 0.85em;
-            margin-right: 10px;
+            text-align: center;
             font-weight: 600;
         }
 
-        @keyframes fadeInDown {
+        .ai-stats {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
         }
 
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 2em;
+                font-size: 1.8rem;
             }
 
-            .btn {
-                min-width: 150px;
-                padding: 15px 25px;
-                font-size: 1em;
-            }
-
-            .stat-card {
-                min-width: 150px;
-            }
-
-            .config-grid {
+            .sport-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .match-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
@@ -333,274 +392,193 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 AI Betting Genius</h1>
-            <div class="subtitle">
-                Ultimate Multi-Sport Intelligence • 12 Sports • Self-Learning AI • Real-Time Analysis
+            <h1>🧠⚽ AI Betting Genius</h1>
+            <p>Ultimate Multi-Sport Intelligence • 25+ Modules • 18 AI Algorithms • 24/7 Global Coverage</p>
+        </div>
+
+        <div class="ai-stats" id="aiStats">
+            <div class="stat-item">
+                <span class="stat-value" id="statAccuracy">--</span>
+                <span class="stat-label">AI Accuracy</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statMatches">0</span>
+                <span class="stat-label">Matches Found</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statLeagues">0</span>
+                <span class="stat-label">Leagues Tracked</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statAnalyzed">0</span>
+                <span class="stat-label">Total Analyzed</span>
             </div>
         </div>
 
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="label">AI Accuracy</div>
-                <div class="value" id="accuracy">--</div>
+        <div class="controls">
+            <div class="control-group">
+                <label>🌍 Select Sport / League (Backend analyzes ALL leagues when "All" selected)</label>
+                <div class="sport-grid">
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="all" id="sport-all" checked>
+                        <label for="sport-all">🌍 All Sports & Leagues</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="football" id="sport-football">
+                        <label for="sport-football">⚽ Football</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="basketball" id="sport-basketball">
+                        <label for="sport-basketball">🏀 Basketball</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="hockey" id="sport-hockey">
+                        <label for="sport-hockey">🏒 Hockey</label>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="label">Analyzed Matches</div>
-                <div class="value" id="analyzed">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Active APIs</div>
-                <div class="value" id="sources">12</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Learning Status</div>
-                <div class="value" id="learning">🔄</div>
-            </div>
-        </div>
 
-        <div class="config-panel">
-            <h2 style="margin-bottom: 15px;">⚙️ Ultimate Configuration Panel</h2>
-            <div class="config-grid">
-                <div class="config-item">
-                    <label for="sport">Sport Type (12 Available)</label>
-                    <select id="sport">
-                        <option value="all">🌐 All Sports (Multi-API)</option>
-                        <optgroup label="⚽ Popular Sports">
-                            <option value="football" selected>⚽ Football (Soccer)</option>
-                            <option value="basketball">🏀 Basketball</option>
-                            <option value="nba">🏀 NBA</option>
-                            <option value="tennis">🎾 Tennis</option>
-                            <option value="hockey">🏒 Ice Hockey</option>
-                            <option value="volleyball">🏐 Volleyball</option>
-                        </optgroup>
-                        <optgroup label="🇺🇸 American Sports">
-                            <option value="nfl">🏈 American Football (NFL)</option>
-                            <option value="baseball">⚾ Baseball (MLB)</option>
-                        </optgroup>
-                        <optgroup label="🌍 Other Sports">
-                            <option value="handball">🤾 Handball</option>
-                            <option value="rugby">🏉 Rugby</option>
-                            <option value="afl">🏉 Australian Football (AFL)</option>
-                            <option value="mma">🥊 MMA / UFC</option>
-                            <option value="formula1">🏎️ Formula 1</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div class="config-item">
-                    <label for="minConfidence">Min Confidence Level</label>
-                    <select id="minConfidence">
-                        <option value="70">70% - Medium</option>
-                        <option value="75">75% - Medium-High</option>
-                        <option value="80" selected>80% - High</option>
-                        <option value="85">85% - Very High</option>
-                    </select>
-                </div>
-                <div class="config-item">
-                    <label for="betType">Bet Type Filter</label>
-                    <select id="betType">
-                        <option value="all" selected>All Types</option>
-                        <option value="1x2">1X2 (Match Result)</option>
-                        <option value="goals">Over/Under Goals</option>
-                        <option value="btts">Both Teams To Score</option>
-                        <option value="corners">Corners</option>
-                        <option value="cards">Cards</option>
-                    </select>
-                </div>
-                <div class="config-item">
-                    <label for="league">League / Competition</label>
-                    <select id="league">
-                        <option value="all" selected>🌐 All Leagues & Competitions</option>
-                        <optgroup label="⚽ Top 5 European Leagues">
-                            <option value="top5">⭐ Top 5 Only (Big 5)</option>
-                            <option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-                            <option value="laliga">🇪🇸 La Liga</option>
-                            <option value="bundesliga">🇩🇪 Bundesliga</option>
-                            <option value="seriea">🇮🇹 Serie A</option>
-                            <option value="ligue1">🇫🇷 Ligue 1</option>
-                        </optgroup>
-                        <optgroup label="⚽ Other European">
-                            <option value="eredivisie">🇳🇱 Eredivisie</option>
-                            <option value="primeira">🇵🇹 Primeira Liga</option>
-                            <option value="championship">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
-                        </optgroup>
-                        <optgroup label="🏀 Basketball">
-                            <option value="nba">🏀 NBA</option>
-                            <option value="euroleague">🏀 EuroLeague</option>
-                            <option value="ncaa">🏀 NCAA</option>
-                        </optgroup>
-                        <optgroup label="🏈 American Sports">
-                            <option value="nfl">🏈 NFL</option>
-                            <option value="mlb">⚾ MLB</option>
-                        </optgroup>
-                        <optgroup label="🏆 International">
-                            <option value="ucl">⭐ Champions League</option>
-                            <option value="uel">🏆 Europa League</option>
-                            <option value="worldcup">🌍 World Cup</option>
-                        </optgroup>
-                    </select>
+            <div class="control-group">
+                <label>🎯 Minimum Confidence Level</label>
+                <div class="slider-container">
+                    <input type="range" id="minConfidence" min="70" max="95" value="80" step="1">
+                    <span class="confidence-value" id="confidenceDisplay">80%</span>
                 </div>
             </div>
-        </div>
 
-        <div class="button-group">
-            <button class="btn btn-primary" id="analyzeBtn">
-                🔍 Analyze Live Matches
-            </button>
-            <button class="btn btn-secondary" id="resetBtn">
-                🔄 Reset AI Learning
+            <button class="analyze-btn" onclick="analyzeMatches()" id="analyzeBtn">
+                🚀 Analyze Live Matches
             </button>
         </div>
 
-        <div id="results" class="results"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>🧠 AI analyzing matches with 25+ modules...</p>
+        </div>
+
+        <div class="results" id="results"></div>
     </div>
 
     <script>
-        const API_URL = '/api/analyze';
-        let analyzing = false;
-        let stats = {
-            accuracy: 0,
-            analyzed: 0,
-            learning: '🔄'
-        };
+        // Confidence slider
+        const slider = document.getElementById('minConfidence');
+        const display = document.getElementById('confidenceDisplay');
+        
+        slider.addEventListener('input', function() {
+            display.textContent = this.value + '%';
+        });
 
-        function loadStats() {
-            const saved = localStorage.getItem('aiStats');
-            if (saved) {
-                stats = JSON.parse(saved);
-                updateStatsDisplay();
-            }
-        }
-
-        function updateStatsDisplay() {
-            document.getElementById('accuracy').textContent = stats.accuracy ? `${stats.accuracy}%` : '--';
-            document.getElementById('analyzed').textContent = stats.analyzed;
-            document.getElementById('learning').textContent = stats.learning;
-        }
-
-        function saveStats() {
-            localStorage.setItem('aiStats', JSON.stringify(stats));
-        }
-
-        document.getElementById('analyzeBtn').addEventListener('click', async () => {
-            if (analyzing) return;
-
-            analyzing = true;
-            const btn = document.getElementById('analyzeBtn');
-            btn.disabled = true;
-            btn.textContent = '🔄 Analyzing...';
-
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="loading">🧠 AI analyzing live matches across 12 sports...</div>';
-
+        async function analyzeMatches() {
+            const selectedSport = document.querySelector('input[name="sport"]:checked').value;
+            const minConfidence = parseInt(document.getElementById('minConfidence').value);
+            
+            const loadingEl = document.getElementById('loading');
+            const resultsEl = document.getElementById('results');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            // Show loading
+            loadingEl.classList.add('active');
+            resultsEl.innerHTML = '';
+            analyzeBtn.disabled = true;
+            
             try {
-                const config = {
-                    sport: document.getElementById('sport').value,
-                    minConfidence: parseInt(document.getElementById('minConfidence').value),
-                    betType: document.getElementById('betType').value,
-                    league: document.getElementById('league').value
-                };
-
-                const response = await fetch(API_URL, {
+                const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(config)
+                    body: JSON.stringify({
+                        sport: selectedSport,
+                        minConfidence: minConfidence
+                    })
                 });
-
+                
                 const data = await response.json();
-
-                if (data.success) {
-                    displayResults(data);
-                    stats.analyzed += data.matches_found || 0;
-                    stats.accuracy = data.ai_accuracy || stats.accuracy;
-                    stats.learning = data.learning_status || '✅';
-                    saveStats();
-                    updateStatsDisplay();
+                
+                // Hide loading
+                loadingEl.classList.remove('active');
+                analyzeBtn.disabled = false;
+                
+                if (data.success && data.results && data.results.length > 0) {
+                    // Update stats
+                    document.getElementById('statAccuracy').textContent = data.ai_accuracy + '%';
+                    document.getElementById('statMatches').textContent = data.matches_found || 0;
+                    document.getElementById('statLeagues').textContent = data.leagues_tracked || 0;
+                    document.getElementById('statAnalyzed').textContent = data.total_analyzed || 0;
+                    
+                    // Display matches
+                    resultsEl.innerHTML = data.results.map(match => createMatchCard(match)).join('');
                 } else {
-                    resultsDiv.innerHTML = `
+                    resultsEl.innerHTML = `
                         <div class="error">
-                            <h3>⚠️ ${data.message || 'No matches available'}</h3>
-                            <p>${data.error || 'Try again later when matches are live.'}</p>
-                            <p style="margin-top: 10px; opacity: 0.8;">Best time: 15:00-22:00 CEST on match days</p>
+                            ⚠️ ${data.message || 'No matches found matching your criteria. Try lowering confidence level or check back later.'}
+                            <br><br>
+                            <small>${data.learning_status || ''}</small>
                         </div>
                     `;
                 }
             } catch (error) {
-                resultsDiv.innerHTML = `
+                loadingEl.classList.remove('active');
+                analyzeBtn.disabled = false;
+                resultsEl.innerHTML = `
                     <div class="error">
-                        <h3>❌ Connection Error</h3>
-                        <p>${error.message}</p>
+                        ❌ Error: ${error.message}
+                        <br><br>
+                        Please try again or contact support.
                     </div>
                 `;
-            } finally {
-                analyzing = false;
-                btn.disabled = false;
-                btn.textContent = '🔍 Analyze Live Matches';
             }
-        });
-
-        function displayResults(data) {
-            const resultsDiv = document.getElementById('results');
-            
-            if (!data.results || data.results.length === 0) {
-                resultsDiv.innerHTML = `
-                    <div class="error">
-                        <h3>📭 No High-Confidence Signals</h3>
-                        <p>AI is learning. Try different filters or check back soon.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = `<h2 style="margin-bottom: 20px;">🎯 ${data.matches_found} High-Value Opportunities Found</h2>`;
-
-            data.results.forEach(match => {
-                const confidenceClass = match.confidence >= 85 ? 'confidence-high' : 
-                                       match.confidence >= 75 ? 'confidence-medium' : 'confidence-low';
-
-                html += `
-                    <div class="match-card">
-                        <div class="match-header">
-                            <div>
-                                <span class="sport-badge">${match.sport || '⚽ Football'}</span>
-                                <div class="match-teams">${match.home_team} vs ${match.away_team}</div>
-                            </div>
-                            <div class="confidence-badge ${confidenceClass}">
-                                ${match.confidence}% Confidence
-                            </div>
-                        </div>
-                        <p style="opacity: 0.9; margin-bottom: 15px;">
-                            🏆 ${match.league || 'League'} • ⏰ ${match.minute || '--'}'
-                        </p>
-                        <div class="signals-grid">
-                            ${match.signals.map(signal => `
-                                <div class="signal-card">
-                                    <div class="signal-title">${signal.type}</div>
-                                    <div class="signal-description">${signal.reasoning}</div>
-                                    <div style="margin-top: 8px; font-weight: 700; color: #4ade80;">
-                                        📊 ${signal.accuracy}% accuracy
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-
-            resultsDiv.innerHTML = html;
         }
 
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            if (confirm('Reset AI learning data? This will clear all accumulated knowledge.')) {
-                localStorage.removeItem('aiStats');
-                stats = { accuracy: 0, analyzed: 0, learning: '🔄' };
-                updateStatsDisplay();
-                alert('AI learning data has been reset.');
-            }
-        });
+        function createMatchCard(match) {
+            const confidenceClass = match.confidence >= 85 ? 'confidence-high' : 'confidence-medium';
+            
+            const contextBadges = match.context_badges ? 
+                match.context_badges.map(badge => `<span class="context-badge">${badge}</span>`).join('') : '';
+            
+            const signals = match.signals ? 
+                match.signals.map(signal => `
+                    <div class="signal">
+                        <div class="signal-header">
+                            <span class="signal-type">${signal.type}</span>
+                            <span class="signal-accuracy">📊 ${signal.accuracy}%</span>
+                        </div>
+                        <div class="signal-reasoning">${signal.reasoning}</div>
+                        <div class="signal-algorithm">Algorithm: ${signal.algorithm}</div>
+                    </div>
+                `).join('') : '';
+            
+            return `
+                <div class="match-card">
+                    <div class="match-header">
+                        <div>
+                            <div class="match-teams">${match.sport} ${match.home_team} vs ${match.away_team}</div>
+                            <div class="match-info">
+                                <span>🏆 ${match.league}</span>
+                                <span>⏰ ${match.minute}'</span>
+                                <span>⚽ ${match.home_goals}-${match.away_goals}</span>
+                            </div>
+                        </div>
+                        <span class="confidence-badge ${confidenceClass}">
+                            ${match.confidence}% Confidence
+                        </span>
+                    </div>
+                    
+                    ${contextBadges ? `<div class="context-badges">${contextBadges}</div>` : ''}
+                    
+                    <div class="signals">
+                        ${signals}
+                    </div>
+                </div>
+            `;
+        }
 
-        loadStats();
+        // Auto-load on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                // Don't auto-analyze, let user click button
+            }, 500);
+        });
     </script>
 </body>
 </html>
