@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚽ AI Betting Genius - Ultimate System</title>
+    <title>🧠 AI Betting Genius - Ultimate System</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -18,702 +13,193 @@
             padding: 20px;
             color: #fff;
         }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            animation: fadeIn 0.8s ease-in;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .controls {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-
-        .control-group {
-            margin-bottom: 25px;
-        }
-
-        .control-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .control-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .sport-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .bet-types-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .sport-option, .bet-type-option {
-            position: relative;
-        }
-
-        .sport-option input[type="radio"],
-        .bet-type-option input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .sport-option label,
-        .bet-type-option label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .sport-option input[type="radio"]:checked + label,
-        .bet-type-option input[type="checkbox"]:checked + label {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .sport-option label:hover,
-        .bet-type-option label:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        input[type="range"] {
-            flex: 1;
-            height: 8px;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .confidence-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            min-width: 60px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 15px;
-            border-radius: 10px;
-        }
-
-        .analyze-btn {
-            width: 100%;
-            padding: 18px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fff;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.5);
-        }
-
-        .analyze-btn:active {
-            transform: translateY(0);
-        }
-
-        .analyze-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            display: none;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #fff;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .results {
-            display: grid;
-            gap: 20px;
-        }
-
-        .match-card {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .match-teams {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #2d3748;
-        }
-
-        .match-info {
-            display: flex;
-            gap: 15px;
-            font-size: 0.9rem;
-            color: #718096;
-            flex-wrap: wrap;
-        }
-
-        .confidence-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .confidence-high {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            color: white;
-        }
-
-        .confidence-medium {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
-            color: white;
-        }
-
-        .context-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .context-badge {
-            padding: 6px 12px;
-            background: #edf2f7;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .signals {
-            display: grid;
-            gap: 15px;
-        }
-
-        .signal {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .signal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .signal-type {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .signal-accuracy {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 12px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        .signal-reasoning {
-            font-size: 0.95rem;
-            opacity: 0.95;
-            line-height: 1.5;
-        }
-
-        .signal-algorithm {
-            font-size: 0.8rem;
-            margin-top: 8px;
-            opacity: 0.8;
-            font-style: italic;
-        }
-
-        .ai-stats {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; animation: fadeIn 0.8s ease-in; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+        .controls { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 20px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+        .control-group { margin-bottom: 25px; }
+        .control-group:last-child { margin-bottom: 0; }
+        .control-group label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 1.1rem; }
+        .sport-grid, .bet-types-grid { display: grid; gap: 10px; margin-top: 15px; }
+        .sport-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+        .bet-types-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        .sport-option, .bet-type-option { position: relative; }
+        .sport-option input[type="radio"], .bet-type-option input[type="checkbox"] { position: absolute; opacity: 0; }
+        .sport-option label, .bet-type-option label { display: flex; align-items: center; gap: 8px; padding: 12px 15px; background: rgba(255, 255, 255, 0.1); border: 2px solid transparent; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; font-weight: 500; font-size: 0.9rem; }
+        .sport-option input[type="radio"]:checked + label, .bet-type-option input[type="checkbox"]:checked + label { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.5); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .sport-option label:hover, .bet-type-option label:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+        .slider-container { display: flex; align-items: center; gap: 20px; }
+        input[type="range"] { flex: 1; height: 8px; border-radius: 5px; background: rgba(255, 255, 255, 0.2); outline: none; -webkit-appearance: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .confidence-value { font-size: 1.5rem; font-weight: 700; min-width: 60px; text-align: center; background: rgba(255, 255, 255, 0.2); padding: 8px 15px; border-radius: 10px; }
+        .analyze-btn { width: 100%; padding: 18px; font-size: 1.3rem; font-weight: 700; color: #fff; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border: none; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4); text-transform: uppercase; letter-spacing: 1px; }
+        .analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245, 87, 108, 0.5); }
+        .analyze-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .loading { text-align: center; padding: 40px; display: none; }
+        .loading.active { display: block; }
+        .spinner { border: 4px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top: 4px solid #fff; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .results { display: grid; gap: 20px; }
+        .match-card { background: rgba(255, 255, 255, 0.95); color: #333; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
+        .match-teams { font-size: 1.4rem; font-weight: 700; color: #2d3748; }
+        .match-info { display: flex; gap: 15px; font-size: 0.9rem; color: #718096; flex-wrap: wrap; }
+        .confidence-badge { padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 1.1rem; color: white; }
+        .confidence-high { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); }
+        .confidence-medium { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); }
+        .context-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .context-badge { padding: 6px 12px; background: #edf2f7; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #4a5568; }
+        .signals { display: grid; gap: 15px; }
+        .signal { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+        .signal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .signal-type { font-size: 1.2rem; font-weight: 700; }
+        .signal-accuracy { background: rgba(255, 255, 255, 0.2); padding: 5px 12px; border-radius: 10px; font-weight: 700; }
+        .signal-reasoning { font-size: 0.95rem; opacity: 0.95; line-height: 1.5; }
+        .signal-algorithm { font-size: 0.8rem; margin-top: 8px; opacity: 0.8; font-style: italic; }
+        .ai-stats { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 20px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; display: block; }
+        .stat-label { font-size: 0.9rem; opacity: 0.8; margin-top: 5px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-
-            .sport-grid, .bet-types-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .match-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
+            .header h1 { font-size: 1.8rem; }
+            .sport-grid, .bet-types-grid { grid-template-columns: 1fr; }
+            .match-header { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠⚽ AI Betting Genius</h1>
-            <p>Ultimate Multi-Sport Intelligence • 25+ Modules • 18 AI Algorithms • Debug Mode</p>
+            <h1>🧠 AI Betting Genius</h1>
+            <p>Ultimate Multi-Sport Intelligence • 25+ Modules • Debug Mode</p>
         </div>
-
         <div class="ai-stats" id="aiStats">
-            <div class="stat-item">
-                <span class="stat-value" id="statAccuracy">--</span>
-                <span class="stat-label">AI Accuracy</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="statMatches">0</span>
-                <span class="stat-label">Matches Found</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="statLeagues">0</span>
-                <span class="stat-label">Leagues Tracked</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="statAnalyzed">0</span>
-                <span class="stat-label">Total Analyzed</span>
-            </div>
+            <div class="stat-item"><span class="stat-value" id="statAccuracy">--</span><span class="stat-label">AI Accuracy</span></div>
+            <div class="stat-item"><span class="stat-value" id="statMatches">0</span><span class="stat-label">Matches Found</span></div>
+            <div class="stat-item"><span class="stat-value" id="statLeagues">0</span><span class="stat-label">Leagues Tracked</span></div>
+            <div class="stat-item"><span class="stat-value" id="statAnalyzed">0</span><span class="stat-label">Total Analyzed</span></div>
         </div>
-
         <div class="controls">
             <div class="control-group">
-                <label>🌍 Select Sport / League (ALL = Every sport & league worldwide)</label>
+                <label>🌍 Select Sport (ALL = Every sport & league worldwide)</label>
                 <div class="sport-grid">
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="all" id="sport-all" checked>
-                        <label for="sport-all">🌍 All Sports & Leagues</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="football" id="sport-football">
-                        <label for="sport-football">⚽ Football</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="basketball" id="sport-basketball">
-                        <label for="sport-basketball">🏀 Basketball</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="nba" id="sport-nba">
-                        <label for="sport-nba">🏀 NBA</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="hockey" id="sport-hockey">
-                        <label for="sport-hockey">🏒 Hockey</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="baseball" id="sport-baseball">
-                        <label for="sport-baseball">⚾ Baseball</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="nfl" id="sport-nfl">
-                        <label for="sport-nfl">🏈 NFL</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="formula1" id="sport-f1">
-                        <label for="sport-f1">🏎️ Formula 1</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="handball" id="sport-handball">
-                        <label for="sport-handball">🤾 Handball</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="rugby" id="sport-rugby">
-                        <label for="sport-rugby">🏉 Rugby</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="volleyball" id="sport-volleyball">
-                        <label for="sport-volleyball">🏐 Volleyball</label>
-                    </div>
-                    <div class="sport-option">
-                        <input type="radio" name="sport" value="mma" id="sport-mma">
-                        <label for="sport-mma">🥊 MMA</label>
-                    </div>
+                    <div class="sport-option"><input type="radio" name="sport" value="all" id="sport-all" checked><label for="sport-all">🌍 All Sports</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="football" id="sport-football"><label for="sport-football">⚽ Football</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="basketball" id="sport-basketball"><label for="sport-basketball">🏀 Basketball</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="nba" id="sport-nba"><label for="sport-nba">🏀 NBA</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="hockey" id="sport-hockey"><label for="sport-hockey">🏒 Hockey</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="baseball" id="sport-baseball"><label for="sport-baseball">⚾ Baseball</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="nfl" id="sport-nfl"><label for="sport-nfl">🏈 NFL</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="formula1" id="sport-f1"><label for="sport-f1">🏎️ Formula 1</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="handball" id="sport-handball"><label for="sport-handball">🤾 Handball</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="rugby" id="sport-rugby"><label for="sport-rugby">🏉 Rugby</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="volleyball" id="sport-volleyball"><label for="sport-volleyball">🏐 Volleyball</label></div>
+                    <div class="sport-option"><input type="radio" name="sport" value="mma" id="sport-mma"><label for="sport-mma">🥊 MMA</label></div>
                 </div>
             </div>
-
             <div class="control-group">
-                <label>🎲 Bet Types to Analyze (Select multiple)</label>
+                <label>🎲 Bet Types to Analyze</label>
                 <div class="bet-types-grid">
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-result" value="match_result" checked>
-                        <label for="bet-result">🎯 Match Result</label>
-                    </div>
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-btts" value="btts" checked>
-                        <label for="bet-btts">⚔️ BTTS</label>
-                    </div>
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-over" value="over_under" checked>
-                        <label for="bet-over">📊 Over/Under</label>
-                    </div>
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-corners" value="corners">
-                        <label for="bet-corners">🚩 Corners</label>
-                    </div>
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-cards" value="cards">
-                        <label for="bet-cards">🟨 Cards</label>
-                    </div>
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-handicap" value="handicap">
-                        <label for="bet-handicap">⚖️ Handicap</label>
-                    </div>
-                    <div class="bet-type-option">
-                        <input type="checkbox" id="bet-double" value="double_chance">
-                        <label for="bet-double">🔄 Double Chance</label>
-                    </div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-result" value="match_result" checked><label for="bet-result">🎯 Match Result</label></div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-btts" value="btts" checked><label for="bet-btts">⚔️ BTTS</label></div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-over" value="over_under" checked><label for="bet-over">📊 Over/Under</label></div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-corners" value="corners"><label for="bet-corners">🚩 Corners</label></div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-cards" value="cards"><label for="bet-cards">🟨 Cards</label></div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-handicap" value="handicap"><label for="bet-handicap">⚖️ Handicap</label></div>
+                    <div class="bet-type-option"><input type="checkbox" id="bet-double" value="double_chance"><label for="bet-double">🔄 Double Chance</label></div>
                 </div>
             </div>
-
             <div class="control-group">
                 <label>🎯 Minimum Confidence Level</label>
                 <div class="slider-container">
-                    <input type="range" id="minConfidence" min="70" max="95" value="75" step="1">
-                    <span class="confidence-value" id="confidenceDisplay">75%</span>
+                    <input type="range" id="minConfidence" min="70" max="95" value="70" step="1">
+                    <span class="confidence-value" id="confidenceDisplay">70%</span>
                 </div>
             </div>
-
-            <button class="analyze-btn" onclick="analyzeMatches()" id="analyzeBtn">
-                🚀 Analyze Live Matches
-            </button>
+            <button class="analyze-btn" onclick="analyzeMatches()" id="analyzeBtn">🚀 Analyze Live Matches</button>
         </div>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>🧠 AI analyzing matches with 25+ modules...</p>
-        </div>
-
+        <div class="loading" id="loading"><div class="spinner"></div><p>🧠 AI analyzing matches with 25+ modules...</p></div>
         <div class="results" id="results"></div>
     </div>
-        <script>
-        // Confidence slider
+    <script>
         const slider = document.getElementById('minConfidence');
         const display = document.getElementById('confidenceDisplay');
-        
-        slider.addEventListener('input', function() {
-            display.textContent = this.value + '%';
-        });
+        slider.addEventListener('input', function() { display.textContent = this.value + '%'; });
 
         async function analyzeMatches() {
             const selectedSport = document.querySelector('input[name="sport"]:checked').value;
-            const minConfidence = parseInt(document.getElementById('minConfidence').value) || 75;
-            
-            // Get selected bet types
-            const betTypes = [];
-            document.querySelectorAll('.bet-type-option input[type="checkbox"]:checked').forEach(cb => {
-                betTypes.push(cb.value);
-            });
+            const minConfidence = parseInt(document.getElementById('minConfidence').value);
+            const betTypes = Array.from(document.querySelectorAll('.bet-type-option input:checked')).map(cb => cb.value);
             
             const loadingEl = document.getElementById('loading');
             const resultsEl = document.getElementById('results');
             const analyzeBtn = document.getElementById('analyzeBtn');
             
-            // Show loading
             loadingEl.classList.add('active');
             resultsEl.innerHTML = '';
             analyzeBtn.disabled = true;
             
             try {
-                console.log('📤 REQUEST:', { 
-                    sport: selectedSport, 
-                    minConfidence: minConfidence,
-                    betTypes: betTypes 
-                });
-                
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        sport: selectedSport,
-                        minConfidence: minConfidence,
-                        betTypes: betTypes
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ sport: selectedSport, minConfidence: minConfidence, betTypes: betTypes })
                 });
-                
-                console.log('📥 Response Status:', response.status);
                 
                 const data = await response.json();
                 
-                console.log('📦 FULL BACKEND DATA:', data);
-                
-                // Hide loading
                 loadingEl.classList.remove('active');
                 analyzeBtn.disabled = false;
                 
-                // ===== DEBUG MODE - SHOW FULL RESPONSE =====
-                resultsEl.innerHTML = `
+                let debugHtml = `
                     <div style="background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); color: #fff; padding: 30px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
                         <h2 style="margin: 0 0 20px 0; font-size: 2rem;">🐛 DEBUG MODE - Full Backend Response</h2>
-                        
                         <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
                             <h3 style="margin-top: 0; color: #60a5fa;">📊 Summary:</h3>
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Backend Success:</td>
-                                    <td style="padding: 10px 0;">${data.success ? '✅ TRUE' : '❌ FALSE'}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Matches Found:</td>
-                                    <td style="padding: 10px 0;">${data.matches_found || 0}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Results Array:</td>
-                                    <td style="padding: 10px 0;">${data.results ? data.results.length + ' items' : 'NULL or EMPTY'}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">AI Accuracy:</td>
-                                    <td style="padding: 10px 0;">${data.ai_accuracy || '--'}%</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Active Source:</td>
-                                    <td style="padding: 10px 0;">${data.active_source || 'N/A'}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Sport Requested:</td>
-                                    <td style="padding: 10px 0;">${data.sport || selectedSport}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Message:</td>
-                                    <td style="padding: 10px 0;">${data.message || 'None'}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Error:</td>
-                                    <td style="padding: 10px 0;">${data.error || 'None'}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Learning Status:</td>
-                                    <td style="padding: 10px 0;">${data.learning_status || 'N/A'}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Total Analyzed:</td>
-                                    <td style="padding: 10px 0;">${data.total_analyzed || 0}</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                                    <td style="padding: 10px 0; font-weight: 600;">Leagues Tracked:</td>
-                                    <td style="padding: 10px 0;">${data.leagues_tracked || 0}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; font-weight: 600;">Modules Active:</td>
-                                    <td style="padding: 10px 0;">${data.modules_active ? data.modules_active.join(', ') : 'N/A'}</td>
-                                </tr>
+                            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-weight: 600;">Backend Success:</td><td style="padding: 10px 0;">${data.success ? '✅ TRUE' : '❌ FALSE'}</td></tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-weight: 600;">Matches Found:</td><td style="padding: 10px 0;">${data.matches_found || 0}</td></tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-weight: 600;">Results Array:</td><td style="padding: 10px 0;">${data.results ? data.results.length + ' items' : 'NULL'}</td></tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-weight: 600;">Message:</td><td style="padding: 10px 0;">${data.message || 'None'}</td></tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-weight: 600;">Error:</td><td style="padding: 10px 0;">${data.error || 'None'}</td></tr>
                             </table>
                         </div>
-                        
                         <div style="background: #000; padding: 20px; border-radius: 10px; overflow-x: auto;">
-                            <h3 style="color: #10b981; margin-top: 0;">📄 RAW JSON Response (Full Backend Output):</h3>
+                            <h3 style="color: #10b981; margin-top: 0;">📄 RAW JSON Response:</h3>
                             <pre style="color: #10b981; margin: 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;">${JSON.stringify(data, null, 2)}</pre>
-                        </div>
-                        
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(59, 130, 246, 0.2); border-radius: 10px; border-left: 4px solid #3b82f6;">
-                            <h4 style="margin: 0 0 10px 0; color: #60a5fa;">💡 Debug Info:</h4>
-                            <p style="margin: 5px 0; font-size: 0.9rem;">• If you see <strong>"success: false"</strong> - backend couldn't find matches</p>
-                            <p style="margin: 5px 0; font-size: 0.9rem;">• If <strong>"results: null"</strong> - no matches passed filters</p>
-                            <p style="margin: 5px 0; font-size: 0.9rem;">• If <strong>"matches_found: 0"</strong> - no live matches now or all filtered out</p>
-                            <p style="margin: 5px 0; font-size: 0.9rem;">• Current time: ${new Date().toLocaleString('pl-PL')} - Check if matches are actually live</p>
-                            <p style="margin: 5px 0; font-size: 0.9rem;">• Min confidence: ${minConfidence}% - Try lowering to 70-75% if no results</p>
                         </div>
                     </div>
                 `;
-                
-                // If successful and has results, display matches
+                resultsEl.innerHTML = debugHtml;
+
                 if (data.success && data.results && data.results.length > 0) {
-                    // Update stats
                     document.getElementById('statAccuracy').textContent = data.ai_accuracy + '%';
                     document.getElementById('statMatches').textContent = data.matches_found || 0;
                     document.getElementById('statLeagues').textContent = data.leagues_tracked || 0;
                     document.getElementById('statAnalyzed').textContent = data.total_analyzed || 0;
                     
-                    // Add matches after debug info
-                    resultsEl.innerHTML += '<h2 style="color: #fff; text-align: center; margin: 30px 0; font-size: 2rem;">⚽ Live Matches with AI Predictions:</h2>';
+                    resultsEl.innerHTML += '<h2 style="color: #fff; text-align: center; margin: 30px 0;">⚽ Live Matches with AI Predictions:</h2>';
                     resultsEl.innerHTML += data.results.map(match => createMatchCard(match)).join('');
                 } else {
-                    // No matches found
-                    resultsEl.innerHTML += `
-                        <div style="background: rgba(239, 68, 68, 0.15); border: 3px solid rgba(239, 68, 68, 0.4); color: #fee2e2; padding: 40px; border-radius: 20px; text-align: center; font-size: 1.2rem; margin-top: 30px; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);">
+                     resultsEl.innerHTML += `
+                        <div style="background: rgba(239, 68, 68, 0.15); border: 3px solid rgba(239, 68, 68, 0.4); color: #fee2e2; padding: 40px; border-radius: 20px; text-align: center; font-size: 1.2rem; margin-top: 30px;">
                             <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
-                            <h3 style="margin: 0 0 15px 0; font-size: 1.8rem; color: #fff;">No Matches Found</h3>
-                            <p style="margin: 10px 0; font-size: 1.1rem;">${data.message || 'No matches available matching your criteria.'}</p>
-                            <p style="margin: 20px 0; opacity: 0.9;">${data.learning_status || 'System is ready - waiting for live matches.'}</p>
-                            
-                            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px; text-align: left;">
-                                <h4 style="margin: 0 0 15px 0; color: #fbbf24;">💡 Possible Reasons:</h4>
-                                <ul style="margin: 0; padding-left: 20px; line-height: 2;">
-                                    <li>No live matches currently (it's ${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2,'0')} - try during peak hours 15:00-23:00)</li>
-                                    <li>All matches filtered out by ${minConfidence}% confidence threshold (try lowering to 70-75%)</li>
-                                    <li>Selected sport "${selectedSport}" has no active matches now</li>
-                                    <li>Match-fixing detector blocked suspicious matches</li>
-                                    <li>API rate limit reached (wait 1 minute and try again)</li>
-                                </ul>
-                            </div>
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.8rem; color: #fff;">No High-Confidence Matches Found</h3>
+                            <p style="margin: 10px 0; font-size: 1.1rem;">${data.message || 'Try again during peak hours (15:00-23:00) or lower confidence.'}</p>
                         </div>
                     `;
                 }
             } catch (error) {
-                console.error('❌ FRONTEND ERROR:', error);
                 loadingEl.classList.remove('active');
                 analyzeBtn.disabled = false;
-                
                 resultsEl.innerHTML = `
-                    <div style="background: #7f1d1d; color: #fee2e2; padding: 40px; border-radius: 20px; margin: 20px 0; box-shadow: 0 10px 40px rgba(127, 29, 29, 0.5);">
-                        <h2 style="color: #fca5a5; margin-top: 0; font-size: 2rem;">❌ Frontend JavaScript Error</h2>
-                        <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin: 20px 0;">
-                            <p style="font-size: 1.2rem; margin: 10px 0;"><strong>Error Message:</strong></p>
-                            <p style="font-size: 1.1rem; color: #ff6b6b; margin: 10px 0;">${error.message}</p>
-                        </div>
-                        <pre style="background: #000; color: #ff6b6b; padding: 20px; border-radius: 10px; overflow-x: auto; font-family: monospace; font-size: 0.9rem; line-height: 1.6;">${error.stack || error}</pre>
-                        <div style="margin-top: 30px; padding: 20px; background: rgba(251, 191, 36, 0.2); border-radius: 10px; border-left: 4px solid #fbbf24;">
-                            <h4 style="color: #fbbf24; margin: 0 0 10px 0;">🔧 Troubleshooting:</h4>
-                            <ul style="line-height: 2; margin: 0; padding-left: 20px;">
-                                <li>Open browser console (F12) for detailed logs</li>
-                                <li>Check if /api/analyze endpoint is accessible</li>
-                                <li>Verify Vercel deployment is successful</li>
-                                <li>Check for CORS or network errors</li>
-                            </ul>
-                        </div>
+                    <div style="background: #7f1d1d; color: #fee2e2; padding: 40px; border-radius: 20px; margin: 20px 0;">
+                        <h2 style="color: #fca5a5; margin-top: 0;">❌ Frontend JavaScript Error</h2>
+                        <p><strong>Message:</strong> ${error.message}</p>
+                        <pre style="background: #000; color: #ff6b6b; padding: 20px; border-radius: 10px; overflow-x: auto; margin-top: 15px;">${error.stack || error}</pre>
                     </div>
                 `;
             }
@@ -721,21 +207,17 @@
 
         function createMatchCard(match) {
             const confidenceClass = match.confidence >= 85 ? 'confidence-high' : 'confidence-medium';
-            
-            const contextBadges = match.context_badges ? 
-                match.context_badges.map(badge => `<span class="context-badge">${badge}</span>`).join('') : '';
-            
-            const signals = match.signals ? 
-                match.signals.map(signal => `
-                    <div class="signal">
-                        <div class="signal-header">
-                            <span class="signal-type">${signal.type}</span>
-                            <span class="signal-accuracy">📊 ${signal.accuracy}%</span>
-                        </div>
-                        <div class="signal-reasoning">${signal.reasoning}</div>
-                        <div class="signal-algorithm">Algorithm: ${signal.algorithm}</div>
+            const contextBadges = match.context_badges ? match.context_badges.map(badge => `<span class="context-badge">${badge}</span>`).join('') : '';
+            const signals = match.signals ? match.signals.map(signal => `
+                <div class="signal">
+                    <div class="signal-header">
+                        <span class="signal-type">${signal.type}</span>
+                        <span class="signal-accuracy">📊 ${signal.accuracy}%</span>
                     </div>
-                `).join('') : '';
+                    <div class="signal-reasoning">${signal.reasoning}</div>
+                    <div class="signal-algorithm">Algorithm: ${signal.algorithm}</div>
+                </div>
+            `).join('') : '';
             
             return `
                 <div class="match-card">
@@ -749,26 +231,13 @@
                                 <span>📈 xG: ${match.home_xg?.toFixed(1) || '0.0'} - ${match.away_xg?.toFixed(1) || '0.0'}</span>
                             </div>
                         </div>
-                        <span class="confidence-badge ${confidenceClass}">
-                            ${match.confidence}% Confidence
-                        </span>
+                        <span class="confidence-badge ${confidenceClass}">${match.confidence}%</span>
                     </div>
-                    
                     ${contextBadges ? `<div class="context-badges">${contextBadges}</div>` : ''}
-                    
-                    <div class="signals">
-                        ${signals || '<p style="text-align:center; color:#999; padding:20px;">No signals generated for this match</p>'}
-                    </div>
+                    <div class="signals">${signals}</div>
                 </div>
             `;
         }
-
-        // Auto-update stats on load
-        window.addEventListener('load', function() {
-            console.log('🚀 AI Betting Genius Loaded - Ready!');
-            console.log('📍 Backend: /api/analyze');
-            console.log('⏰ Current time:', new Date().toLocaleString('pl-PL'));
-        });
-        </script>
-        </body>
+    </script>
+</body>
 </html>
