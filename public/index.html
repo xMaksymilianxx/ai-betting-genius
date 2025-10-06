@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚽ AI Betting Genius - Ultimate 25+ Modules</title>
+    <title>⚽ AI Betting Genius - Ultimate System</title>
     <style>
         * {
             margin: 0;
@@ -51,7 +51,7 @@
         }
 
         .control-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .control-group:last-child {
@@ -61,47 +61,59 @@
         .control-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 1.1rem;
         }
 
         .sport-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
             margin-top: 15px;
         }
 
-        .sport-option {
+        .bet-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .sport-option, .bet-type-option {
             position: relative;
         }
 
-        .sport-option input[type="radio"] {
+        .sport-option input[type="radio"],
+        .bet-type-option input[type="checkbox"] {
             position: absolute;
             opacity: 0;
         }
 
-        .sport-option label {
+        .sport-option label,
+        .bet-type-option label {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 15px;
+            gap: 8px;
+            padding: 12px 15px;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid transparent;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
+            font-size: 0.95rem;
         }
 
-        .sport-option input[type="radio"]:checked + label {
+        .sport-option input[type="radio"]:checked + label,
+        .bet-type-option input[type="checkbox"]:checked + label {
             background: rgba(255, 255, 255, 0.25);
             border-color: rgba(255, 255, 255, 0.5);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .sport-option label:hover {
+        .sport-option label:hover,
+        .bet-type-option label:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
         }
@@ -242,6 +254,7 @@
             gap: 15px;
             font-size: 0.9rem;
             color: #718096;
+            flex-wrap: wrap;
         }
 
         .confidence-badge {
@@ -323,16 +336,6 @@
             font-style: italic;
         }
 
-        .error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid rgba(239, 68, 68, 0.3);
-            color: #dc2626;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            font-weight: 600;
-        }
-
         .ai-stats {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -377,7 +380,7 @@
                 font-size: 1.8rem;
             }
 
-            .sport-grid {
+            .sport-grid, .bet-types-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -393,7 +396,7 @@
     <div class="container">
         <div class="header">
             <h1>🧠⚽ AI Betting Genius</h1>
-            <p>Ultimate Multi-Sport Intelligence • 25+ Modules • 18 AI Algorithms • 24/7 Global Coverage</p>
+            <p>Ultimate Multi-Sport Intelligence • 25+ Modules • 18 AI Algorithms • Debug Mode</p>
         </div>
 
         <div class="ai-stats" id="aiStats">
@@ -417,7 +420,7 @@
 
         <div class="controls">
             <div class="control-group">
-                <label>🌍 Select Sport / League (Backend analyzes ALL leagues when "All" selected)</label>
+                <label>🌍 Select Sport / League (ALL = Every sport & league worldwide)</label>
                 <div class="sport-grid">
                     <div class="sport-option">
                         <input type="radio" name="sport" value="all" id="sport-all" checked>
@@ -432,8 +435,74 @@
                         <label for="sport-basketball">🏀 Basketball</label>
                     </div>
                     <div class="sport-option">
+                        <input type="radio" name="sport" value="nba" id="sport-nba">
+                        <label for="sport-nba">🏀 NBA</label>
+                    </div>
+                    <div class="sport-option">
                         <input type="radio" name="sport" value="hockey" id="sport-hockey">
                         <label for="sport-hockey">🏒 Hockey</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="baseball" id="sport-baseball">
+                        <label for="sport-baseball">⚾ Baseball</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="nfl" id="sport-nfl">
+                        <label for="sport-nfl">🏈 NFL</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="formula1" id="sport-f1">
+                        <label for="sport-f1">🏎️ Formula 1</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="handball" id="sport-handball">
+                        <label for="sport-handball">🤾 Handball</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="rugby" id="sport-rugby">
+                        <label for="sport-rugby">🏉 Rugby</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="volleyball" id="sport-volleyball">
+                        <label for="sport-volleyball">🏐 Volleyball</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="radio" name="sport" value="mma" id="sport-mma">
+                        <label for="sport-mma">🥊 MMA</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>🎲 Bet Types to Analyze (Select multiple)</label>
+                <div class="bet-types-grid">
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-result" value="match_result" checked>
+                        <label for="bet-result">🎯 Match Result</label>
+                    </div>
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-btts" value="btts" checked>
+                        <label for="bet-btts">⚔️ BTTS</label>
+                    </div>
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-over" value="over_under" checked>
+                        <label for="bet-over">📊 Over/Under</label>
+                    </div>
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-corners" value="corners">
+                        <label for="bet-corners">🚩 Corners</label>
+                    </div>
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-cards" value="cards">
+                        <label for="bet-cards">🟨 Cards</label>
+                    </div>
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-handicap" value="handicap">
+                        <label for="bet-handicap">⚖️ Handicap</label>
+                    </div>
+                    <div class="bet-type-option">
+                        <input type="checkbox" id="bet-double" value="double_chance">
+                        <label for="bet-double">🔄 Double Chance</label>
                     </div>
                 </div>
             </div>
@@ -441,8 +510,8 @@
             <div class="control-group">
                 <label>🎯 Minimum Confidence Level</label>
                 <div class="slider-container">
-                    <input type="range" id="minConfidence" min="70" max="95" value="80" step="1">
-                    <span class="confidence-value" id="confidenceDisplay">80%</span>
+                    <input type="range" id="minConfidence" min="70" max="95" value="75" step="1">
+                    <span class="confidence-value" id="confidenceDisplay">75%</span>
                 </div>
             </div>
 
@@ -458,8 +527,7 @@
 
         <div class="results" id="results"></div>
     </div>
-
-    <script>
+        <script>
         // Confidence slider
         const slider = document.getElementById('minConfidence');
         const display = document.getElementById('confidenceDisplay');
@@ -470,7 +538,13 @@
 
         async function analyzeMatches() {
             const selectedSport = document.querySelector('input[name="sport"]:checked').value;
-            const minConfidence = parseInt(document.getElementById('minConfidence').value);
+            const minConfidence = parseInt(document.getElementById('minConfidence').value) || 75;
+            
+            // Get selected bet types
+            const betTypes = [];
+            document.querySelectorAll('.bet-type-option input[type="checkbox"]:checked').forEach(cb => {
+                betTypes.push(cb.value);
+            });
             
             const loadingEl = document.getElementById('loading');
             const resultsEl = document.getElementById('results');
@@ -482,6 +556,12 @@
             analyzeBtn.disabled = true;
             
             try {
+                console.log('📤 REQUEST:', { 
+                    sport: selectedSport, 
+                    minConfidence: minConfidence,
+                    betTypes: betTypes 
+                });
+                
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: {
@@ -489,16 +569,97 @@
                     },
                     body: JSON.stringify({
                         sport: selectedSport,
-                        minConfidence: minConfidence
+                        minConfidence: minConfidence,
+                        betTypes: betTypes
                     })
                 });
                 
+                console.log('📥 Response Status:', response.status);
+                
                 const data = await response.json();
+                
+                console.log('📦 FULL BACKEND DATA:', data);
                 
                 // Hide loading
                 loadingEl.classList.remove('active');
                 analyzeBtn.disabled = false;
                 
+                // ===== DEBUG MODE - SHOW FULL RESPONSE =====
+                resultsEl.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); color: #fff; padding: 30px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                        <h2 style="margin: 0 0 20px 0; font-size: 2rem;">🐛 DEBUG MODE - Full Backend Response</h2>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                            <h3 style="margin-top: 0; color: #60a5fa;">📊 Summary:</h3>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Backend Success:</td>
+                                    <td style="padding: 10px 0;">${data.success ? '✅ TRUE' : '❌ FALSE'}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Matches Found:</td>
+                                    <td style="padding: 10px 0;">${data.matches_found || 0}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Results Array:</td>
+                                    <td style="padding: 10px 0;">${data.results ? data.results.length + ' items' : 'NULL or EMPTY'}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">AI Accuracy:</td>
+                                    <td style="padding: 10px 0;">${data.ai_accuracy || '--'}%</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Active Source:</td>
+                                    <td style="padding: 10px 0;">${data.active_source || 'N/A'}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Sport Requested:</td>
+                                    <td style="padding: 10px 0;">${data.sport || selectedSport}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Message:</td>
+                                    <td style="padding: 10px 0;">${data.message || 'None'}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Error:</td>
+                                    <td style="padding: 10px 0;">${data.error || 'None'}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Learning Status:</td>
+                                    <td style="padding: 10px 0;">${data.learning_status || 'N/A'}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Total Analyzed:</td>
+                                    <td style="padding: 10px 0;">${data.total_analyzed || 0}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                    <td style="padding: 10px 0; font-weight: 600;">Leagues Tracked:</td>
+                                    <td style="padding: 10px 0;">${data.leagues_tracked || 0}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; font-weight: 600;">Modules Active:</td>
+                                    <td style="padding: 10px 0;">${data.modules_active ? data.modules_active.join(', ') : 'N/A'}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div style="background: #000; padding: 20px; border-radius: 10px; overflow-x: auto;">
+                            <h3 style="color: #10b981; margin-top: 0;">📄 RAW JSON Response (Full Backend Output):</h3>
+                            <pre style="color: #10b981; margin: 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;">${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(59, 130, 246, 0.2); border-radius: 10px; border-left: 4px solid #3b82f6;">
+                            <h4 style="margin: 0 0 10px 0; color: #60a5fa;">💡 Debug Info:</h4>
+                            <p style="margin: 5px 0; font-size: 0.9rem;">• If you see <strong>"success: false"</strong> - backend couldn't find matches</p>
+                            <p style="margin: 5px 0; font-size: 0.9rem;">• If <strong>"results: null"</strong> - no matches passed filters</p>
+                            <p style="margin: 5px 0; font-size: 0.9rem;">• If <strong>"matches_found: 0"</strong> - no live matches now or all filtered out</p>
+                            <p style="margin: 5px 0; font-size: 0.9rem;">• Current time: ${new Date().toLocaleString('pl-PL')} - Check if matches are actually live</p>
+                            <p style="margin: 5px 0; font-size: 0.9rem;">• Min confidence: ${minConfidence}% - Try lowering to 70-75% if no results</p>
+                        </div>
+                    </div>
+                `;
+                
+                // If successful and has results, display matches
                 if (data.success && data.results && data.results.length > 0) {
                     // Update stats
                     document.getElementById('statAccuracy').textContent = data.ai_accuracy + '%';
@@ -506,25 +667,53 @@
                     document.getElementById('statLeagues').textContent = data.leagues_tracked || 0;
                     document.getElementById('statAnalyzed').textContent = data.total_analyzed || 0;
                     
-                    // Display matches
-                    resultsEl.innerHTML = data.results.map(match => createMatchCard(match)).join('');
+                    // Add matches after debug info
+                    resultsEl.innerHTML += '<h2 style="color: #fff; text-align: center; margin: 30px 0; font-size: 2rem;">⚽ Live Matches with AI Predictions:</h2>';
+                    resultsEl.innerHTML += data.results.map(match => createMatchCard(match)).join('');
                 } else {
-                    resultsEl.innerHTML = `
-                        <div class="error">
-                            ⚠️ ${data.message || 'No matches found matching your criteria. Try lowering confidence level or check back later.'}
-                            <br><br>
-                            <small>${data.learning_status || ''}</small>
+                    // No matches found
+                    resultsEl.innerHTML += `
+                        <div style="background: rgba(239, 68, 68, 0.15); border: 3px solid rgba(239, 68, 68, 0.4); color: #fee2e2; padding: 40px; border-radius: 20px; text-align: center; font-size: 1.2rem; margin-top: 30px; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.8rem; color: #fff;">No Matches Found</h3>
+                            <p style="margin: 10px 0; font-size: 1.1rem;">${data.message || 'No matches available matching your criteria.'}</p>
+                            <p style="margin: 20px 0; opacity: 0.9;">${data.learning_status || 'System is ready - waiting for live matches.'}</p>
+                            
+                            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px; text-align: left;">
+                                <h4 style="margin: 0 0 15px 0; color: #fbbf24;">💡 Possible Reasons:</h4>
+                                <ul style="margin: 0; padding-left: 20px; line-height: 2;">
+                                    <li>No live matches currently (it's ${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2,'0')} - try during peak hours 15:00-23:00)</li>
+                                    <li>All matches filtered out by ${minConfidence}% confidence threshold (try lowering to 70-75%)</li>
+                                    <li>Selected sport "${selectedSport}" has no active matches now</li>
+                                    <li>Match-fixing detector blocked suspicious matches</li>
+                                    <li>API rate limit reached (wait 1 minute and try again)</li>
+                                </ul>
+                            </div>
                         </div>
                     `;
                 }
             } catch (error) {
+                console.error('❌ FRONTEND ERROR:', error);
                 loadingEl.classList.remove('active');
                 analyzeBtn.disabled = false;
+                
                 resultsEl.innerHTML = `
-                    <div class="error">
-                        ❌ Error: ${error.message}
-                        <br><br>
-                        Please try again or contact support.
+                    <div style="background: #7f1d1d; color: #fee2e2; padding: 40px; border-radius: 20px; margin: 20px 0; box-shadow: 0 10px 40px rgba(127, 29, 29, 0.5);">
+                        <h2 style="color: #fca5a5; margin-top: 0; font-size: 2rem;">❌ Frontend JavaScript Error</h2>
+                        <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                            <p style="font-size: 1.2rem; margin: 10px 0;"><strong>Error Message:</strong></p>
+                            <p style="font-size: 1.1rem; color: #ff6b6b; margin: 10px 0;">${error.message}</p>
+                        </div>
+                        <pre style="background: #000; color: #ff6b6b; padding: 20px; border-radius: 10px; overflow-x: auto; font-family: monospace; font-size: 0.9rem; line-height: 1.6;">${error.stack || error}</pre>
+                        <div style="margin-top: 30px; padding: 20px; background: rgba(251, 191, 36, 0.2); border-radius: 10px; border-left: 4px solid #fbbf24;">
+                            <h4 style="color: #fbbf24; margin: 0 0 10px 0;">🔧 Troubleshooting:</h4>
+                            <ul style="line-height: 2; margin: 0; padding-left: 20px;">
+                                <li>Open browser console (F12) for detailed logs</li>
+                                <li>Check if /api/analyze endpoint is accessible</li>
+                                <li>Verify Vercel deployment is successful</li>
+                                <li>Check for CORS or network errors</li>
+                            </ul>
+                        </div>
                     </div>
                 `;
             }
@@ -552,11 +741,12 @@
                 <div class="match-card">
                     <div class="match-header">
                         <div>
-                            <div class="match-teams">${match.sport} ${match.home_team} vs ${match.away_team}</div>
+                            <div class="match-teams">${match.sport || '⚽'} ${match.home_team} vs ${match.away_team}</div>
                             <div class="match-info">
                                 <span>🏆 ${match.league}</span>
                                 <span>⏰ ${match.minute}'</span>
                                 <span>⚽ ${match.home_goals}-${match.away_goals}</span>
+                                <span>📈 xG: ${match.home_xg?.toFixed(1) || '0.0'} - ${match.away_xg?.toFixed(1) || '0.0'}</span>
                             </div>
                         </div>
                         <span class="confidence-badge ${confidenceClass}">
@@ -567,18 +757,18 @@
                     ${contextBadges ? `<div class="context-badges">${contextBadges}</div>` : ''}
                     
                     <div class="signals">
-                        ${signals}
+                        ${signals || '<p style="text-align:center; color:#999; padding:20px;">No signals generated for this match</p>'}
                     </div>
                 </div>
             `;
         }
 
-        // Auto-load on page load
+        // Auto-update stats on load
         window.addEventListener('load', function() {
-            setTimeout(() => {
-                // Don't auto-analyze, let user click button
-            }, 500);
+            console.log('🚀 AI Betting Genius Loaded - Ready!');
+            console.log('📍 Backend: /api/analyze');
+            console.log('⏰ Current time:', new Date().toLocaleString('pl-PL'));
         });
-    </script>
-</body>
+        </script>
+        </body>
 </html>
