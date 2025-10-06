@@ -3,39 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 AI Betting Genius v4.0 - Live Value Hunter</title>
+    <title>🧠 AI Betting Genius v4.0</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #1F2937 0%, #111827 100%); min-height: 100vh; padding: 20px; color: #E5E7EB; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #fff; text-shadow: 0 0 15px rgba(167, 139, 250, 0.5); }
-        .controls { background: #1F2937; border-radius: 20px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
-        .control-group { margin-bottom: 25px; }
-        .control-group label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 1.1rem; color: #D1D5DB; }
-        .slider-container { display: flex; align-items: center; gap: 20px; }
-        input[type="range"] { flex: 1; -webkit-appearance: none; height: 8px; border-radius: 5px; background: #374151; outline: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #A78BFA; cursor: pointer; }
-        .confidence-value { font-size: 1.5rem; font-weight: 700; background: #374151; padding: 8px 15px; border-radius: 10px; }
-        .analyze-btn { width: 100%; padding: 18px; font-size: 1.3rem; font-weight: 700; color: #fff; background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%); border: none; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; }
-        .loading { text-align: center; padding: 40px; display: none; }
-        .loading.active { display: block; }
-        .spinner { border: 4px solid #4B5563; border-radius: 50%; border-top: 4px solid #A78BFA; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .results { display: grid; gap: 20px; }
-        .match-card { background: #374151; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #4B5563; }
-        .match-teams { font-size: 1.4rem; font-weight: 700; color: #F3F4F6; }
-        .match-info { font-size: 0.9rem; color: #9CA3AF; }
-        .confidence-badge { background-color: #1F2937; color: #C4B5FD; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 1.1rem; }
-        .signals { display: grid; gap: 15px; }
-        .signal { background: #4B5563; color: #E5E7EB; padding: 20px; border-radius: 15px; border-left: 5px solid #8B5CF6; }
-        .signal.value-bet { border-left-color: #FBBF24; background: linear-gradient(135deg, #4a3a24 0%, #3d2c12 100%); }
-        .signal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .signal-type { font-size: 1.2rem; font-weight: 700; color: #fff; }
-        .signal.value-bet .signal-type { color: #FBBF24; }
-        .signal-accuracy { background: rgba(167, 139, 250, 0.2); color: #C4B5FD; padding: 5px 12px; border-radius: 10px; font-weight: 700; }
-        .signal-reasoning { font-size: 0.95rem; opacity: 0.9; line-height: 1.5; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1d29 0%, #2d3142 100%);
+            color: #fff; min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 3em; margin-bottom: 10px; }
+        .header p { color: #a0a0a0; font-size: 1.2em; }
+        .controls { background: #2a2d3a; padding: 30px; border-radius: 20px; margin-bottom: 30px; }
+        .slider-container { margin-bottom: 20px; }
+        .slider-container label { display: block; margin-bottom: 10px; color: #a0a0a0; }
+        .slider { width: 100%; height: 8px; border-radius: 4px; background: #3a3d4a;
+                 outline: none; -webkit-appearance: none; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none;
+                                        width: 24px; height: 24px; border-radius: 50%;
+                                        background: #7c3aed; cursor: pointer; }
+        .value-display { display: inline-block; background: #3a3d4a; padding: 8px 20px;
+                        border-radius: 10px; font-size: 1.5em; font-weight: bold;
+                        margin-left: 20px; }
+        .btn { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+              border: none; color: white; padding: 20px 40px; font-size: 1.2em;
+              border-radius: 15px; cursor: pointer; width: 100%; font-weight: bold;
+              transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .loading { text-align: center; padding: 40px; font-size: 1.2em; color: #a0a0a0; }
+        .results { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                  gap: 20px; }
+        .match-card { background: #2a2d3a; border-radius: 15px; padding: 20px;
+                     border-left: 4px solid #7c3aed; }
+        .match-header { margin-bottom: 15px; }
+        .match-title { font-size: 1.3em; font-weight: bold; margin-bottom: 5px; }
+        .match-info { color: #a0a0a0; font-size: 0.9em; }
+        .match-score { font-size: 2em; font-weight: bold; text-align: center;
+                      margin: 15px 0; color: #7c3aed; }
+        .confidence { background: #3a3d4a; padding: 10px; border-radius: 10px;
+                     text-align: center; margin-bottom: 15px; }
+        .signal { background: #3a3d4a; padding: 12px; border-radius: 10px; margin-bottom: 10px; }
+        .signal-type { font-weight: bold; margin-bottom: 5px; }
+        .signal-odds { color: #7c3aed; font-size: 1.2em; font-weight: bold; }
+        .no-results { text-align: center; padding: 60px 20px; }
+        .no-results h2 { font-size: 2em; margin-bottom: 10px; }
+        .no-results p { color: #a0a0a0; font-size: 1.1em; }
     </style>
 </head>
 <body>
@@ -44,82 +58,86 @@
             <h1>🧠 AI Betting Genius v4.0</h1>
             <p>Live Value Hunter</p>
         </div>
-        <div class="controls">
-            <div class="control-group">
-                <label>🎯 Minimalny Poziom Pewności</label>
-                <div class="slider-container">
-                    <input type="range" id="minConfidence" min="65" max="95" value="75" step="1">
-                    <span class="confidence-value" id="confidenceDisplay">75%</span>
-                </div>
-            </div>
-            <button class="analyze-btn" onclick="analyzeMatches()" id="analyzeBtn">🚀 Analizuj Mecze LIVE</button>
-        </div>
-        <div class="loading" id="loading"><div class="spinner"></div><p>🧠 AI analizuje rynek na żywo...</p></div>
-        <div class="results" id="results"></div>
-    </div>
-    <script>
-        const slider = document.getElementById('minConfidence');
-        const display = document.getElementById('confidenceDisplay');
-        slider.oninput = function() { display.textContent = this.value + '%'; }
 
-        async function analyzeMatches() {
-            const minConfidence = parseInt(slider.value);
-            const loadingEl = document.getElementById('loading');
-            const resultsEl = document.getElementById('results');
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            
-            loadingEl.classList.add('active');
-            resultsEl.innerHTML = '';
+        <div class="controls">
+            <div class="slider-container">
+                <label>🎯 Minimalny Poziom Pewności</label>
+                <input type="range" min="0" max="100" value="0" class="slider" id="confidenceSlider">
+                <span class="value-display" id="confidenceValue">0%</span>
+            </div>
+            <button class="btn" id="analyzeBtn" onclick="analyze()">
+                🚀 Analizuj Mecze LIVE
+            </button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('confidenceSlider');
+        const valueDisplay = document.getElementById('confidenceValue');
+        const resultsDiv = document.getElementById('results');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+
+        slider.oninput = function() {
+            valueDisplay.textContent = this.value + '%';
+        }
+
+        async function analyze() {
             analyzeBtn.disabled = true;
-            
+            resultsDiv.innerHTML = '<div class="loading">🔍 Szukam live meczów...</div>';
+
             try {
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ mode: 'live', minConfidence: minConfidence })
+                    body: JSON.stringify({minConfidence: parseInt(slider.value)})
                 });
+
                 const data = await response.json();
-                
-                if (data.success && data.results && data.results.length > 0) {
-                    resultsEl.innerHTML = data.results.map(match => createMatchCard(match)).join('');
+
+                if (!data.success || !data.results || data.results.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="no-results">
+                            <h2>Brak live meczow o ${new Date().toLocaleTimeString('pl-PL', {hour:'2-digit',minute:'2-digit'})}.</h2>
+                            <p>Peak: 18:00-22:00 CEST.</p>
+                        </div>`;
                 } else {
-                    resultsEl.innerHTML = `<div style="text-align:center;padding:40px;">${data.message || 'Nie znaleziono okazji spełniających kryteria.'}</div>`;
+                    displayResults(data.results);
                 }
             } catch (error) {
-                resultsEl.innerHTML = `<div style="text-align:center;padding:40px;">Błąd: ${error.message}</div>`;
-            } finally {
-                loadingEl.classList.remove('active');
-                analyzeBtn.disabled = false;
+                resultsDiv.innerHTML = `
+                    <div class="no-results">
+                        <h2>❌ Błąd połączenia</h2>
+                        <p>${error.message}</p>
+                    </div>`;
             }
+
+            analyzeBtn.disabled = false;
         }
 
-        function createMatchCard(match) {
-            const signals = match.signals ? match.signals.map(signal => {
-                const isValueBet = signal.algorithm.includes('VALUE_BET');
-                return `
-                <div class="signal ${isValueBet ? 'value-bet' : ''}">
-                    <div class="signal-header">
-                        <span class="signal-type">${signal.type}</span>
-                        <span class="signal-accuracy">📊 ${signal.accuracy}%</span>
-                    </div>
-                    <div class="signal-reasoning">${signal.reasoning}</div>
-                </div>
-            `}).join('') : '';
-
-            const liveInfo = `<span>⏰ ${match.minute}'</span><span>⚽ ${match.home_goals}-${match.away_goals}</span>`;
-            
-            return `
-                <div class="match-card">
-                    <div class="match-header">
-                        <div>
-                            <div class="match-teams">${match.home_team} vs ${match.away_team}</div>
-                            <div class="match-info">${match.league} | ${liveInfo}</div>
+        function displayResults(matches) {
+            resultsDiv.innerHTML = '<div class="results">' + 
+                matches.map(m => `
+                    <div class="match-card">
+                        <div class="match-header">
+                            <div class="match-title">${m.h} vs ${m.a}</div>
+                            <div class="match-info">${m.lig} • ${m.src} • ${m.min}'</div>
                         </div>
-                        <span class="confidence-badge">${match.confidence}%</span>
+                        <div class="match-score">${m.hg} - ${m.ag}</div>
+                        <div class="confidence">
+                            Pewność: <strong>${m.conf}%</strong> | xG: ${m.hx} - ${m.ax}
+                        </div>
+                        ${m.sigs.map(s => `
+                            <div class="signal">
+                                <div class="signal-type">${s.type}</div>
+                                <div>Kurs: <span class="signal-odds">${s.odds}</span> | 
+                                     Prob: ${s.prob}% | Acc: ${s.acc}%</div>
+                                <div style="color:#a0a0a0;font-size:0.9em;margin-top:5px">${s.info}</div>
+                            </div>
+                        `).join('')}
                     </div>
-                    <div class="signals">${signals}</div>
-                </div>
-            `;
+                `).join('') + '</div>';
         }
     </script>
 </body>
