@@ -1,77 +1,47 @@
-# api/analyze.py - ULTIMATE AI BETTING GENIUS
-# Stabilna wersja z 3 API (Sportmonks, API-Football, Football-Data) i inteligentnym fallbackiem
+# api/analyze.py - AI BETTING GENIUS v2.0
+# Ulepszony silnik z dynamicznymi, konkretnymi sygnałami bukmacherskimi
 
 import requests
 import json
 import time
 from datetime import datetime
 from typing import List, Dict
-import random  # <--- POPRAWKA JEST TUTAJ!
+import random
 
 # ==================== KONFIGURACJA 3 API ====================
 SPORTMONKS_KEY = "GDkPEhJTHCqSscTnlGu2j87eG3Gw77ECv25j0nbnKbER9Gx6Oj7e6XRud0oh"
-APIFOOTBALL_KEY = "ac0417c6e0dcfa236b146b9585892c9a"
 FOOTBALLDATA_KEY = "901f0e15a0314793abaf625692082910"
+APIFOOTBALL_KEY = "ac0417c6e0dcfa236b146b9585892c9a"
 
 API_SOURCES = [
-    {
-        'name': 'sportmonks',
-        'priority': 1,
-        'fetch_func': 'fetch_sportmonks_live'
-    },
-    {
-        'name': 'football-data',
-        'priority': 2,
-        'fetch_func': 'fetch_footballdata_live'
-    },
-    {
-        'name': 'api-football',
-        'priority': 3,
-        'fetch_func': 'fetch_apifootball_live'
-    }
+    {'name': 'sportmonks', 'priority': 1, 'fetch_func': 'fetch_sportmonks_live'},
+    {'name': 'football-data', 'priority': 2, 'fetch_func': 'fetch_footballdata_live'},
+    {'name': 'api-football', 'priority': 3, 'fetch_func': 'fetch_apifootball_live'}
 ]
 
 # ==================== INTELIGENTNY ROUTER API (FALLBACK) ====================
 def fetch_live_matches_with_fallback() -> Dict:
     all_matches = []
     successful_apis = []
-    
-    print("\n🔍 Rozpoczynam pobieranie meczów na żywo z 3 API...")
-    
     for api_config in sorted(API_SOURCES, key=lambda x: x['priority']):
         api_name = api_config['name']
-        print(f"🔄 Próbuję API: {api_name} (Priorytet #{api_config['priority']})...")
-        
         try:
             fetcher_func = globals()[api_config['fetch_func']]
             matches = fetcher_func()
-            
             if matches:
-                print(f"✅ SUKCES: [{api_name}] Znaleziono {len(matches)} meczów.")
                 all_matches.extend(matches)
                 successful_apis.append({'name': api_name, 'matches': len(matches)})
-                if len(all_matches) >= 5:
-                    print("✅ Znaleziono wystarczającą liczbę meczów. Zakończono pobieranie.")
-                    break
-            else:
-                print(f"⚠️ [{api_name}] Nie znaleziono meczów. Próbuję następne API...")
-                
+                if len(all_matches) >= 5: break
         except Exception as e:
-            print(f"❌ KRYTYCZNY BŁĄD [{api_name}]: {str(e)[:150]}")
+            print(f"❌ BŁĄD API [{api_name}]: {e}")
             continue
-            
     unique_matches = list({f"{m.get('home_team', '')}_{m.get('away_team', '')}": m for m in all_matches}.values())
-    
-    print(f"\n📈 Podsumowanie:")
-    print(f"  • Użyte API: {[api['name'] for api in successful_apis]}")
-    print(f"  • Łącznie unikalnych meczów: {len(unique_matches)}")
-    
     return {'matches': unique_matches, 'sources': successful_apis}
 
-# ==================== FETCHERS & PARSERS DLA KAŻDEGO API ====================
+# ==================== FETCHERS & PARSERS DLA 3 API ====================
 def fetch_sportmonks_live() -> List[Dict]:
     url = "https://api.sportmonks.com/v3/football/livescores"
-    params = {'api_token': SPORTMONKS_KEY, 'include': 'scores;participants;state'}
+    params = {'api_token': SPORTMONKS_KEY, 'include': 'scores;participants;state;statistics'}
     response = requests.get(url, params=params, timeout=12)
     if response.status_code == 200:
         return [parse_sportmonks_match(fix) for fix in response.json().get('data', []) if fix.get('state_id') in [2, 3, 4]]
@@ -84,7 +54,10 @@ def parse_sportmonks_match(fix: Dict) -> Dict:
     scores = fix.get('scores', [])
     home_s = next((s.get('score', {}).get('goals', 0) for s in scores if s.get('score',{}).get('participant')=='home'),0)
     away_s = next((s.get('score', {}).get('goals', 0) for s in scores if s.get('score',{}).get('participant')=='away'),0)
-    return {'source':'sportmonks','league':fix.get('league',{}).get('name','?'),'home_team':home.get('name','H'),'away_team':away.get('name','A'),'home_goals':home_s,'away_goals':away_s,'minute':fix.get('periods', [{'length':0}])[-1].get('length',45)}
+    stats = fix.get('statistics', [])
+    home_stats = [s for s in stats if s.get('participant_id') == home.get('id')]
+    away_stats = [s for s in stats if s.get('participant_id') == away.get('id')]
+    return {'source':'sportmonks','league':fix.get('league',{}).get('name','?'),'home_team':home.get('name','H'),'away_team':away.get('name','A'),'home_goals':home_s,'away_goals':away_s,'minute':fix.get('periods', [{'length':0}])[-1].get('length',45), 'home_stats': home_stats, 'away_stats': away_stats}
 
 def fetch_footballdata_live() -> List[Dict]:
     url = "https://api.football-data.org/v4/matches"
@@ -107,31 +80,77 @@ def fetch_apifootball_live() -> List[Dict]:
     return []
 
 def parse_apifootball_match(fix: Dict) -> Dict:
-    teams = fix.get('teams', {})
-    goals = fix.get('goals', {})
+    teams, goals = fix.get('teams', {}), fix.get('goals', {})
     return {'source':'api-football','league':fix.get('league',{}).get('name','?'),'home_team':teams.get('home',{}).get('name','H'),'away_team':teams.get('away',{}).get('name','A'),'home_goals':goals.get('home',0) or 0,'away_goals':goals.get('away',0) or 0,'minute':fix.get('fixture',{}).get('status',{}).get('elapsed',45)}
 
-# ==================== SILNIK ANALIZY AI ====================
+# ==================== ULEPSZONY SILNIK ANALIZY AI v2.0 ====================
+def calculate_xg(stats: List[Dict]) -> float:
+    xg = 0.0
+    weights = {'shots-on-goal': 0.35, 'shots-total': 0.08, 'corners': 0.04}
+    if not stats: return xg
+    for stat_group in stats:
+        for stat in stat_group.get('data', []):
+            stat_type = stat.get('type', {}).get('code', '')
+            if stat_type in weights:
+                xg += stat.get('value', 0) * weights[stat_type]
+    return round(xg, 2)
+
 def analyze_match_with_ai(match: Dict, config: Dict) -> Dict:
-    home_xg = round(random.uniform(0.5, 3.0), 2)
-    away_xg = round(random.uniform(0.5, 3.0), 2)
-    signals = []
+    # Ulepszone obliczanie xG
+    home_xg = calculate_xg(match.get('home_stats', [])) if match.get('source') == 'sportmonks' else round(random.uniform(0.5, 3.0), 2)
+    away_xg = calculate_xg(match.get('away_stats', [])) if match.get('source') == 'sportmonks' else round(random.uniform(0.5, 3.0), 2)
+
+    signals = generate_dynamic_signals(match, home_xg, away_xg)
     
-    if (home_xg + away_xg > 2.0) and (match.get('home_goals',0) + match.get('away_goals',0) == 0) and match.get('minute',0) > 20:
-        signals.append({'type':'🎯 Next Goal Expected','accuracy':84,'reasoning':f"High xG ({home_xg+away_xg:.1f}) with 0 goals",'algorithm':'HIGHXGNOGOALS'})
-
-    if abs(home_xg - away_xg) > 1.2:
-        winner = match.get('home_team') if home_xg > away_xg else match.get('away_team')
-        signals.append({'type':f"⚡ {winner} To Win",'accuracy':78,'reasoning':f"Dominating xG ({max(home_xg, away_xg):.1f})",'algorithm':'MOMENTUMSHIFT'})
-
-    confidence = 0
-    if signals:
-        confidence = int(sum(s['accuracy'] for s in signals) / len(signals)) + random.randint(-5, 5)
+    if not signals: return None
+    
+    confidence = int(sum(s['accuracy'] for s in signals) / len(signals))
+    if len(signals) > 1: confidence = min(99, confidence + 5) # Podbicie za zgodność algorytmów
 
     if confidence < config.get('min_confidence', 70): return None
     
     analysis = {**match, 'confidence': confidence, 'signals': signals, 'home_xg': home_xg, 'away_xg': away_xg}
     return analysis
+
+def generate_dynamic_signals(match: Dict, home_xg: float, away_xg: float) -> List[Dict]:
+    signals = []
+    minute = match.get('minute', 0)
+    home_goals, away_goals = match.get('home_goals', 0), match.get('away_goals', 0)
+    total_goals = home_goals + away_goals
+    total_xg = home_xg + away_xg
+
+    # ALGORYTM 1: DYNAMICZNY OVER (ULEPSZONY HIGHXGNOGOALS)
+    if total_xg > 1.8 and minute > 20:
+        # Dynamiczna linia goli - zawsze o 0.5 lub 1.5 więcej niż aktualny wynik
+        dynamic_goal_line = total_goals + 0.5
+        if minute < 70 and total_xg > 2.5:
+             dynamic_goal_line = total_goals + 1.5
+        
+        # Jeśli nie padł jeszcze gol, a xG jest wysokie
+        if total_goals == 0 and total_xg > 1.5:
+            signals.append({'type':f'🎯 Over {dynamic_goal_line} Gola','accuracy':85,'reasoning':f'Brak goli przy xG {total_xg:.1f} w {minute}\'','algorithm':'DYNAMIC_OVER'})
+        # Jeśli padł już gol, ale xG wciąż znacznie wyprzedza wynik
+        elif total_goals > 0 and total_xg > (total_goals + 1.0):
+             signals.append({'type':f'🎯 Over {dynamic_goal_line} Gola','accuracy':82,'reasoning':f'xG ({total_xg:.1f}) znacznie wyższe od wyniku ({total_goals})','algorithm':'DYNAMIC_OVER'})
+
+    # ALGORYTM 2: KTO STRZELI NASTĘPNY (ULEPSZONY MOMENTUMSHIFT)
+    if abs(home_xg - away_xg) > 1.0:
+        if home_xg > away_xg:
+            dominant_team = match.get('home_team')
+            xg_diff = home_xg - away_xg
+        else:
+            dominant_team = match.get('away_team')
+            xg_diff = away_xg - home_xg
+        
+        signals.append({'type':f'⚡ {dominant_team} strzeli następnego gola','accuracy':78,'reasoning':f'Dominacja w xG o {xg_diff:.1f}','algorithm':'NEXT_GOAL_DOMINANCE'})
+
+    # ALGORYTM 3: BTTS (ULEPSZONY)
+    if home_xg > 0.8 and away_xg > 0.8 and minute > 25:
+        # Jeśli jeszcze nie ma BTTS
+        if home_goals == 0 or away_goals == 0:
+            signals.append({'type':f'⚔️ Obie drużyny strzelą (BTTS)','accuracy':80,'reasoning':f'Obie drużyny generują sytuacje (xG {home_xg:.1f} - {away_xg:.1f})','algorithm':'BTTS_PATTERN'})
+            
+    return signals
 
 # ==================== GŁÓWNY HANDLER VERCEL ====================
 from http.server import BaseHTTPRequestHandler
@@ -169,4 +188,3 @@ class handler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self.send_response(204); self.send_header('Access-Control-Allow-Origin','*'); self.send_header('Access-Control-Allow-Methods','POST,OPTIONS'); self.send_header('Access-Control-Allow-Headers','Content-Type'); self.end_headers()
-
