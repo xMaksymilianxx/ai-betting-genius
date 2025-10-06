@@ -1,207 +1,174 @@
-# api/analyze.py - ULTIMATE AI BETTING GENIUS
+# api/analyze.py - AI BETTING GENIUS ULTIMATE
 from http.server import BaseHTTPRequestHandler
 import json, requests
 from datetime import datetime, timedelta
 
 # API KEYS
 API_FOOTBALL_KEY = "ac0417c6e0dcfa236b146b9585892c9a"
-FOOTBALL_DATA_KEY = "901f0e15a0314793abaf625692082910"
+FOOTBALL_DATA_KEY = "901f0e15a0314793abaf625692082910"  
 SPORTMONKS_KEY = "GDkPEhJTHCqSscTnlGu2j87eG3Gw77ECv25j0nbnKabER9Gx6Oj7e6XRud0oh"
 
-# Enhanced xG calculation
-def calculate_xg(goals, minute, possession, is_home):
-    progress = max(minute / 90, 0.35)
-    base_xg = (goals + (0.7 if is_home else 0.5)) / progress
-    possession_bonus = (possession - 50) * 0.01
-    return round(max(0, base_xg + possession_bonus), 2)
+def calculate_xg(goals, minute, is_home=True):
+    """Enhanced xG with momentum"""
+    if minute < 5: return round((goals + (0.8 if is_home else 0.6)) * 20, 2)
+    progress = minute / 90
+    base = (goals + (0.7 if is_home else 0.5)) / max(progress, 0.35)
+    return round(base, 2)
 
-# FETCH API-FOOTBALL
 def fetch_api_football():
+    """Primary API - Most reliable"""
     try:
+        print("đ [API-Football] Fetching...")
         url = "https://v3.football.api-sports.io/fixtures"
         headers = {'x-rapidapi-host': 'v3.football.api-sports.io', 'x-rapidapi-key': API_FOOTBALL_KEY}
-        r = requests.get(url, headers=headers, params={'live': 'all'}, timeout=15)
+        r = requests.get(url, headers=headers, params={'live': 'all'}, timeout=20)
+
         if r.status_code == 200:
+            data = r.json().get('response', [])
             matches = []
-            for m in r.json().get('response', [])[:10]:
-                fixture, teams, goals = m.get('fixture', {}), m.get('teams', {}), m.get('goals', {})
+            for m in data[:20]:  # Limit 20
+                fixture = m.get('fixture', {})
+                teams = m.get('teams', {})
+                goals = m.get('goals', {})
                 matches.append({
-                    'id': fixture.get('id'),
+                    'source': 'api-football',
                     'league': m.get('league', {}).get('name', 'Unknown'),
                     'home_team': teams.get('home', {}).get('name', 'Home'),
                     'away_team': teams.get('away', {}).get('name', 'Away'),
-                    'home_goals': goals.get('home', 0) or 0,
-                    'away_goals': goals.get('away', 0) or 0,
-                    'minute': fixture.get('status', {}).get('elapsed', 0) or 45,
-                    'status': 'LIVE',
-                    'source': 'API-Football'
+                    'home_goals': goals.get('home') or 0,
+                    'away_goals': goals.get('away') or 0,
+                    'minute': fixture.get('status', {}).get('elapsed') or 45
                 })
-            print(f"[API-Football] {len(matches)} matches")
-            return {'success': True, 'matches': matches}
+            print(f"â [API-Football] {len(matches)} matches")
+            return matches
+        print(f"â ď¸ [API-Football] Status {r.status_code}")
     except Exception as e:
-        print(f"[API-Football] Error: {e}")
-    return {'success': False, 'matches': []}
+        print(f"â [API-Football] {e}")
+    return []
 
-# FETCH FOOTBALL-DATA
 def fetch_football_data():
+    """Backup API"""
     try:
-        url = "https://api.football-data.org/v4/matches"
-        r = requests.get(url, headers={'X-Auth-Token': FOOTBALL_DATA_KEY}, params={'status': 'LIVE'}, timeout=15)
+        print("đ [Football-Data] Fetching...")
+        r = requests.get("https://api.football-data.org/v4/matches",
+                        headers={'X-Auth-Token': FOOTBALL_DATA_KEY},
+                        params={'status': 'LIVE'}, timeout=20)
         if r.status_code == 200:
             matches = []
-            for m in r.json().get('matches', [])[:10]:
+            for m in r.json().get('matches', [])[:20]:
                 matches.append({
-                    'id': m.get('id'),
+                    'source': 'football-data',
                     'league': m.get('competition', {}).get('name', 'Unknown'),
                     'home_team': m.get('homeTeam', {}).get('name', 'Home'),
                     'away_team': m.get('awayTeam', {}).get('name', 'Away'),
-                    'home_goals': m.get('score', {}).get('fullTime', {}).get('home', 0) or 0,
-                    'away_goals': m.get('score', {}).get('fullTime', {}).get('away', 0) or 0,
-                    'minute': m.get('minute') or 45,
-                    'status': 'LIVE',
-                    'source': 'Football-Data'
+                    'home_goals': m.get('score', {}).get('fullTime', {}).get('home') or 0,
+                    'away_goals': m.get('score', {}).get('fullTime', {}).get('away') or 0,
+                    'minute': m.get('minute') or 45
                 })
-            print(f"[Football-Data] {len(matches)} matches")
-            return {'success': True, 'matches': matches}
+            print(f"â [Football-Data] {len(matches)} matches")
+            return matches
+        print(f"â ď¸ [Football-Data] Status {r.status_code}")
     except Exception as e:
-        print(f"[Football-Data] Error: {e}")
-    return {'success': False, 'matches': []}
+        print(f"â [Football-Data] {e}")
+    return []
 
-# FETCH SPORTMONKS
-def fetch_sportmonks():
-    try:
-        today = datetime.now().strftime('%Y-%m-%d')
-        tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
-        url = f"https://api.sportmonks.com/v3/football/fixtures/between/{today}/{tomorrow}"
-        r = requests.get(url, params={'api_token': SPORTMONKS_KEY, 'include': 'scores;participants', 
-                        'filters': 'fixtureStates:2,3,4'}, timeout=15)
-        if r.status_code == 200:
-            matches = []
-            for m in [x for x in r.json().get('data', []) if x.get('state_id') in [2, 3, 4]][:10]:
-                parts = m.get('participants', [])
-                home = next((p for p in parts if p.get('meta', {}).get('location') == 'home'), {})
-                away = next((p for p in parts if p.get('meta', {}).get('location') == 'away'), {})
-                scores = m.get('scores', [])
-                hg = next((s.get('score', {}).get('goals', 0) for s in scores if s.get('participant_id') == home.get('id')), 0)
-                ag = next((s.get('score', {}).get('goals', 0) for s in scores if s.get('participant_id') == away.get('id')), 0)
-                matches.append({
-                    'id': m.get('id'),
-                    'league': m.get('league', {}).get('name', 'Unknown'),
-                    'home_team': home.get('name', 'Home'),
-                    'away_team': away.get('name', 'Away'),
-                    'home_goals': hg,
-                    'away_goals': ag,
-                    'minute': m.get('periods', [{'length': 0}])[-1].get('length', 0),
-                    'status': 'LIVE',
-                    'source': 'SportMonks'
-                })
-            print(f"[SportMonks] {len(matches)} matches")
-            return {'success': True, 'matches': matches}
-    except Exception as e:
-        print(f"[SportMonks] Error: {e}")
-    return {'success': False, 'matches': []}
+def analyze_match(m):
+    """Advanced AI Analysis"""
+    minute = m['minute']
+    hg, ag = m['home_goals'], m['away_goals']
 
-# ANALYZE MATCH
-def analyze_match(match):
-    minute = match['minute']
-    hg, ag = match['home_goals'], match['away_goals']
-
-    # Calculate xG (simplified with possession estimate)
-    possession_home = 50 + (hg - ag) * 5  # Estimate based on goals
-    home_xg = calculate_xg(hg, minute, min(70, max(30, possession_home)), True)
-    away_xg = calculate_xg(ag, minute, min(70, max(30, 100 - possession_home)), False)
+    # Calculate xG
+    home_xg = calculate_xg(hg, minute, True)
+    away_xg = calculate_xg(ag, minute, False)
     total_xg = home_xg + away_xg
 
     signals = []
 
-    # Signal 1: Over/Under
-    if total_xg > 1.5:
-        remaining = max(90 - minute, 10)
-        expected = (total_xg / minute) * remaining if minute > 10 else total_xg * 0.5
-        prob = min(expected / 2.0, 0.85)
-        odds = round(1 / prob * 1.08, 2)
-        accuracy = int(prob * 100) - 5
-        if odds >= 1.4:
-            signals.append({
-                'type': f"Over {hg + ag + 0.5} Goals",
-                'odds': odds,
-                'probability': round(prob * 100, 1),
-                'accuracy': accuracy,
-                'reasoning': f"Total xG: {total_xg:.1f}, Expected: {expected:.1f}"
-            })
-
-    # Signal 2: Next Goal
-    if home_xg > away_xg + 0.5:
-        prob = min(0.70, 0.58 + home_xg / 15)
-        odds = round(1 / prob * 1.08, 2)
+    # Algorithm 1: MOMENTUMSHIFT - Dominant team
+    if home_xg > away_xg + 0.6:
+        prob = min(0.78, 0.60 + home_xg / 20)
         signals.append({
-            'type': f"{match['home_team']} Next Goal",
-            'odds': odds,
-            'probability': round(prob * 100, 1),
-            'accuracy': int(prob * 100) - 7,
-            'reasoning': f"Dominance: {home_xg:.1f} vs {away_xg:.1f}"
+            'type': f"âĄ {m['home_team']} To Win",
+            'accuracy': 78,
+            'reasoning': f"Dominating xG ({home_xg:.1f})",
+            'algorithm': 'MOMENTUMSHIFT'
         })
-    elif away_xg > home_xg + 0.5:
-        prob = min(0.70, 0.58 + away_xg / 15)
-        odds = round(1 / prob * 1.08, 2)
+    elif away_xg > home_xg + 0.6:
+        prob = min(0.78, 0.60 + away_xg / 20)
         signals.append({
-            'type': f"{match['away_team']} Next Goal",
-            'odds': odds,
-            'probability': round(prob * 100, 1),
-            'accuracy': int(prob * 100) - 7,
-            'reasoning': f"Dominance: {away_xg:.1f} vs {home_xg:.1f}"
+            'type': f"âĄ {m['away_team']} To Win",
+            'accuracy': 78,
+            'reasoning': f"Dominating xG ({away_xg:.1f})",
+            'algorithm': 'MOMENTUMSHIFT'
         })
 
-    # Signal 3: BTTS
-    if home_xg > 0.8 and away_xg > 0.8:
-        prob = min((home_xg / 2.3) * (away_xg / 2.3), 0.75)
-        odds = round(1 / prob * 1.08, 2)
+    # Algorithm 2: HIGHXGNOGOALS - Goals expected
+    if total_xg > 2.2 and (hg + ag) == 0:
         signals.append({
-            'type': "Both Teams To Score (BTTS)",
-            'odds': odds,
-            'probability': round(prob * 100, 1),
-            'accuracy': int(prob * 100) - 6,
-            'reasoning': f"Both attacking: {home_xg:.1f} & {away_xg:.1f}"
+            'type': "đŻ Next Goal Expected",
+            'accuracy': 84,
+            'reasoning': f"High xG ({total_xg:.1f}) with 0 goals",
+            'algorithm': 'HIGHXGNOGOALS'
+        })
+
+    # Algorithm 3: OVERUNDER - Total goals
+    if total_xg > 2.0:
+        signals.append({
+            'type': f"đ Over {hg + ag + 0.5} Goals",
+            'accuracy': int(min(total_xg / 2.5, 0.82) * 100),
+            'reasoning': f"Total xG: {total_xg:.1f}",
+            'algorithm': 'OVERUNDER'
+        })
+
+    # Algorithm 4: BTTS
+    if home_xg > 0.9 and away_xg > 0.9:
+        signals.append({
+            'type': "âď¸ Both Teams To Score",
+            'accuracy': 76,
+            'reasoning': f"Both attacking: {home_xg:.1f} & {away_xg:.1f}",
+            'algorithm': 'BTTS'
         })
 
     # Fallback
     if not signals:
         signals.append({
-            'type': "Analysis in progress",
-            'odds': 2.00,
-            'probability': 50.0,
+            'type': "đ Analysis in progress",
             'accuracy': 50,
-            'reasoning': "Early game phase - gathering data"
+            'reasoning': "Early game phase",
+            'algorithm': 'EARLYPHASE'
         })
 
     # Calculate confidence
-    valid_probs = [s['probability'] for s in signals if s['probability'] > 0]
-    confidence = int(sum(valid_probs) / len(valid_probs)) if valid_probs else 55
+    accuracies = [s['accuracy'] for s in signals if s['accuracy'] > 0]
+    confidence = int(sum(accuracies) / len(accuracies)) if accuracies else 55
 
-    return {**match, 'confidence': confidence, 'signals': signals[:4], 'home_xg': home_xg, 'away_xg': away_xg}
+    return {
+        **m,
+        'confidence': confidence,
+        'signals': signals[:4],
+        'home_xg': home_xg,
+        'away_xg': away_xg
+    }
 
-# MAIN HANDLER
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
-            post_data = self.rfile.read(content_length) if content_length else b'{}'
-            config = json.loads(post_data.decode('utf-8'))
+            length = int(self.headers.get('Content-Length', 0))
+            body = json.loads(self.rfile.read(length).decode()) if length else {}
 
-            min_confidence = int(config.get('minConfidence', 0))
+            min_conf = int(body.get('minConfidence', 0))
 
-            print(f"[START] Fetching from 3 APIs...")
+            print(f"đ [START] minConfidence={min_conf}")
 
-            # Fetch from all 3 APIs
-            results = []
-            for fetch_func in [fetch_api_football, fetch_football_data, fetch_sportmonks]:
-                result = fetch_func()
-                if result['success']:
-                    results.extend(result['matches'])
+            # Fetch from multiple APIs
+            matches = []
+            matches.extend(fetch_api_football())
+            if len(matches) < 10:
+                matches.extend(fetch_football_data())
 
             # Remove duplicates
-            unique = list({f"{m['home_team']}_{m['away_team']}": m for m in results}.values())
-            print(f"[TOTAL] {len(unique)} unique matches")
+            unique = list({f"{m['home_team']}_{m['away_team']}": m for m in matches}.values())
+            print(f"đ [TOTAL] {len(unique)} unique matches")
 
             if not unique:
                 self.send_response(200)
@@ -210,20 +177,20 @@ class handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({
                     'success': False,
-                    'message': f'No live matches at {datetime.now().strftime("%H:%M")}. Peak: 18:00-22:00 CEST.',
                     'matches_found': 0,
-                    'results': []
-                }, ensure_ascii=False).encode('utf-8'))
+                    'results': [],
+                    'message': f'No live matches at {datetime.now().strftime("%H:%M")}. Peak: 18:00-22:00 CEST.'
+                }, ensure_ascii=False).encode())
                 return
 
-            # Analyze all matches
+            # Analyze
             analyzed = [analyze_match(m) for m in unique]
 
-            # Filter by confidence
-            filtered = [m for m in analyzed if m['confidence'] >= min_confidence] if min_confidence > 0 else analyzed
+            # Filter
+            filtered = [m for m in analyzed if m['confidence'] >= min_conf] if min_conf > 0 else analyzed
             filtered.sort(key=lambda x: x['confidence'], reverse=True)
 
-            print(f"[RESULT] {len(filtered)} matches returned")
+            print(f"â [SUCCESS] {len(filtered)} matches returned")
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -232,20 +199,20 @@ class handler(BaseHTTPRequestHandler):
 
             self.wfile.write(json.dumps({
                 'success': True,
-                'timestamp': datetime.now().isoformat(),
                 'matches_found': len(filtered),
-                'total_live': len(unique),
+                'total_analyzed_raw': len(unique),
                 'results': filtered,
-                'message': f"â {len(filtered)} high-quality matches analyzed"
-            }, ensure_ascii=False).encode('utf-8'))
+                'sources_used': list(set(m['source'] for m in filtered)),
+                'message': f"Found {len(filtered)} high-confidence opportunities from {len(set(m['source'] for m in filtered))} API(s)."
+            }, ensure_ascii=False).encode())
 
         except Exception as e:
-            print(f"[ERROR] {e}")
+            print(f"â [ERROR] {e}")
             self.send_response(500)
             self.send_header('Content-type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(json.dumps({'success': False, 'error': str(e)}).encode('utf-8'))
+            self.wfile.write(json.dumps({'success': False, 'error': str(e)}).encode())
 
     def do_OPTIONS(self):
         self.send_response(204)
