@@ -3,106 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 AI Betting Genius Ultimate</title>
+    <title>🧠 AI Betting Genius v4.0</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #fff; min-height: 100vh; padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 3.5em; margin-bottom: 5px; 
-                     background: linear-gradient(135deg, #7c3aed, #ec4899);
-                     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { color: #94a3b8; font-size: 1.3em; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: rgba(124, 58, 237, 0.1); padding: 20px; border-radius: 15px;
-                    border: 1px solid rgba(124, 58, 237, 0.3); text-align: center; }
-        .stat-value { font-size: 2.5em; font-weight: bold; color: #7c3aed; }
-        .stat-label { color: #94a3b8; margin-top: 5px; }
-        .controls { background: rgba(30, 41, 59, 0.8); padding: 30px; border-radius: 20px;
-                   margin-bottom: 30px; backdrop-filter: blur(10px); }
-        .slider-container { margin-bottom: 25px; }
-        .slider-container label { display: block; margin-bottom: 15px; color: #cbd5e1;
-                                 font-size: 1.1em; font-weight: 600; }
-        .slider { width: 100%; height: 10px; border-radius: 5px; 
-                 background: linear-gradient(to right, #7c3aed, #ec4899);
-                 outline: none; -webkit-appearance: none; }
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px;
-                                       border-radius: 50%; background: #fff; cursor: pointer;
-                                       box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4); }
-        .value-display { display: inline-block; background: rgba(124, 58, 237, 0.2);
-                        padding: 12px 30px; border-radius: 12px; font-size: 2em;
-                        font-weight: bold; margin-left: 20px; color: #7c3aed; }
-        .btn { background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
-              border: none; color: white; padding: 25px 50px; font-size: 1.4em;
-              border-radius: 15px; cursor: pointer; width: 100%; font-weight: bold;
-              transition: all 0.3s; box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4); }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124, 58, 237, 0.6); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .loading { text-align: center; padding: 60px; font-size: 1.5em; color: #94a3b8; }
-        .results { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 25px; }
-        .match-card { background: rgba(30, 41, 59, 0.8); border-radius: 20px; padding: 25px;
-                     border-left: 5px solid #7c3aed; backdrop-filter: blur(10px);
-                     transition: all 0.3s; }
-        .match-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(124, 58, 237, 0.3); }
-        .match-header { margin-bottom: 20px; }
-        .match-title { font-size: 1.5em; font-weight: bold; margin-bottom: 8px; }
-        .match-info { color: #94a3b8; font-size: 1em; display: flex; justify-content: space-between; }
-        .match-score { font-size: 3em; font-weight: bold; text-align: center;
-                      margin: 20px 0; color: #7c3aed; }
-        .xg-bar { display: flex; gap: 10px; margin: 15px 0; align-items: center; }
-        .xg-value { font-size: 0.9em; color: #94a3b8; min-width: 40px; }
-        .confidence-badge { background: linear-gradient(135deg, #7c3aed, #ec4899);
-                           padding: 15px 25px; border-radius: 12px; text-align: center;
-                           margin-bottom: 20px; font-size: 1.3em; font-weight: bold; }
-        .signal { background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px;
-                 margin-bottom: 12px; border-left: 3px solid #ec4899; }
-        .signal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .signal-type { font-weight: bold; font-size: 1.1em; }
-        .signal-accuracy { background: rgba(124, 58, 237, 0.3); padding: 5px 15px;
-                          border-radius: 8px; color: #7c3aed; font-weight: bold; }
-        .signal-reason { color: #94a3b8; font-size: 0.95em; margin-top: 5px; }
-        .signal-algo { color: #64748b; font-size: 0.85em; margin-top: 5px;
-                      font-family: 'Courier New', monospace; }
-        .no-results { text-align: center; padding: 80px 20px; }
-        .no-results h2 { font-size: 2.5em; margin-bottom: 15px; }
-        .no-results p { color: #94a3b8; font-size: 1.3em; }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .header .subtitle {
+            color: #94a3b8;
+            font-size: 1.4em;
+            margin-top: 10px;
+        }
+        
+        .control-panel {
+            background: rgba(51, 65, 85, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .slider-section {
+            margin-bottom: 35px;
+        }
+        
+        .slider-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e2e8f0;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .slider {
+            flex: 1;
+            height: 12px;
+            border-radius: 10px;
+            background: linear-gradient(to right, #6366f1, #8b5cf6, #ec4899);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+            transition: all 0.3s;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.8);
+        }
+        
+        .slider-value {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 15px 35px;
+            border-radius: 16px;
+            font-size: 2.2em;
+            font-weight: 800;
+            min-width: 140px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+        
+        .analyze-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            border: none;
+            color: white;
+            padding: 28px 50px;
+            font-size: 1.6em;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(139, 92, 246, 0.7);
+        }
+        
+        .analyze-btn:active {
+            transform: translateY(0);
+        }
+        
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 1.8em;
+            color: #94a3b8;
+        }
+        
+        .no-matches {
+            text-align: center;
+            padding: 100px 20px;
+            background: rgba(51, 65, 85, 0.4);
+            border-radius: 24px;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        
+        .no-matches h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .no-matches p {
+            font-size: 1.4em;
+            color: #94a3b8;
+        }
+        
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        
+        .match-card {
+            background: rgba(51, 65, 85, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 24px;
+            padding: 30px;
+            transition: all 0.3s;
+            border-left: 6px solid #8b5cf6;
+        }
+        
+        .match-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+            border-left-color: #ec4899;
+        }
+        
+        .match-header {
+            margin-bottom: 20px;
+        }
+        
+        .match-teams {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .match-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 1.05em;
+        }
+        
+        .match-score {
+            text-align: center;
+            font-size: 3.5em;
+            font-weight: 800;
+            margin: 25px 0;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .xg-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+        }
+        
+        .xg-display span {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        
+        .confidence-badge {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 18px 30px;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 800;
+            margin: 25px 0;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+        
+        .signal {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 18px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ec4899;
+            transition: all 0.3s;
+        }
+        
+        .signal:hover {
+            background: rgba(30, 41, 59, 1);
+            transform: translateX(5px);
+        }
+        
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .signal-type {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+        
+        .signal-accuracy {
+            background: rgba(139, 92, 246, 0.3);
+            padding: 6px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #8b5cf6;
+        }
+        
+        .signal-reasoning {
+            color: #94a3b8;
+            margin-top: 8px;
+            font-size: 1.05em;
+        }
+        
+        .signal-algorithm {
+            color: #64748b;
+            font-size: 0.9em;
+            margin-top: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5em; }
+            .matches-grid { grid-template-columns: 1fr; }
+            .control-panel { padding: 25px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 AI Betting Genius Ultimate</h1>
-            <p>Advanced Multi-Algorithm Intelligence System</p>
+            <h1>🧠 AI Betting Genius v4.0</h1>
+            <div class="subtitle">Live Value Hunter</div>
         </div>
         
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-value" id="matchCount">-</div>
-                <div class="stat-label">Matches Found</div>
+        <div class="control-panel">
+            <div class="slider-section">
+                <div class="slider-label">
+                    🎯 Minimalny Poziom Pewności
+                </div>
+                <div class="slider-container">
+                    <input type="range" min="0" max="100" value="0" class="slider" id="confidenceSlider">
+                    <div class="slider-value" id="sliderValue">0%</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value" id="avgConfidence">-</div>
-                <div class="stat-label">Avg Confidence</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="apiCount">-</div>
-                <div class="stat-label">APIs Active</div>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <div class="slider-container">
-                <label>🎯 Minimum Confidence Level</label>
-                <input type="range" min="0" max="100" value="0" class="slider" id="slider">
-                <span class="value-display" id="value">0%</span>
-            </div>
-            <button class="btn" id="btn" onclick="analyze()">
-                🚀 Analyze Live Matches
+            
+            <button class="analyze-btn" id="analyzeBtn" onclick="analyzeLive()">
+                🚀 Analizuj Mecze LIVE
             </button>
         </div>
         
@@ -110,87 +321,83 @@
     </div>
 
     <script>
-        const slider = document.getElementById('slider');
-        const value = document.getElementById('value');
-        const results = document.getElementById('results');
-        const btn = document.getElementById('btn');
+        const slider = document.getElementById('confidenceSlider');
+        const sliderValue = document.getElementById('sliderValue');
+        const resultsDiv = document.getElementById('results');
+        const analyzeBtn = document.getElementById('analyzeBtn');
 
-        slider.oninput = () => value.textContent = slider.value + '%';
+        slider.oninput = function() {
+            sliderValue.textContent = this.value + '%';
+        }
 
-        async function analyze() {
-            btn.disabled = true;
-            results.innerHTML = '<div class="loading">🔍 Analyzing live matches from multiple sources...</div>';
+        async function analyzeLive() {
+            analyzeBtn.disabled = true;
+            resultsDiv.innerHTML = '<div class="loading">🔍 Analizowanie meczów LIVE z wielu źródeł...</div>';
             
             try {
-                const res = await fetch('/api/analyze', {
+                const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({minConfidence: parseInt(slider.value)})
                 });
                 
-                const data = await res.json();
+                const data = await response.json();
                 
                 if (!data.success || !data.results || data.results.length === 0) {
-                    results.innerHTML = `
-                        <div class="no-results">
-                            <h2>⏰ No live matches</h2>
-                            <p>${data.message || 'Peak hours: 18:00-22:00 CEST'}</p>
+                    resultsDiv.innerHTML = `
+                        <div class="no-matches">
+                            <h2>⏰ Brak live meczów o ${new Date().toLocaleTimeString('pl-PL', {hour:'2-digit',minute:'2-digit'})}.</h2>
+                            <p>${data.message || 'Peak: 18:00-22:00 CEST.'}</p>
                         </div>`;
-                    updateStats(0, 0, 0);
                 } else {
-                    displayResults(data.results);
-                    const avgConf = Math.round(data.results.reduce((a,b)=>a+b.confidence,0)/data.results.length);
-                    updateStats(data.matches_found, avgConf, data.sources_used?.length || 1);
+                    displayMatches(data.results);
                 }
             } catch (error) {
-                results.innerHTML = `
-                    <div class="no-results">
-                        <h2>❌ Connection Error</h2>
+                resultsDiv.innerHTML = `
+                    <div class="no-matches">
+                        <h2>❌ Błąd połączenia</h2>
                         <p>${error.message}</p>
                     </div>`;
-                updateStats(0, 0, 0);
             }
             
-            btn.disabled = false;
+            analyzeBtn.disabled = false;
         }
 
-        function updateStats(matches, conf, apis) {
-            document.getElementById('matchCount').textContent = matches;
-            document.getElementById('avgConfidence').textContent = conf + '%';
-            document.getElementById('apiCount').textContent = apis;
-        }
-
-        function displayResults(matches) {
-            results.innerHTML = '<div class="results">' + 
-                matches.map(m => `
+        function displayMatches(matches) {
+            resultsDiv.innerHTML = '<div class="matches-grid">' +
+                matches.map(match => `
                     <div class="match-card">
                         <div class="match-header">
-                            <div class="match-title">⚽ ${m.home_team} vs ${m.away_team}</div>
-                            <div class="match-info">
-                                <span>🏆 ${m.league}</span>
-                                <span>⏰ ${m.minute}'</span>
+                            <div class="match-teams">⚽ ${match.home_team} vs ${match.away_team}</div>
+                            <div class="match-meta">
+                                <span>🏆 ${match.league}</span>
+                                <span>⏰ ${match.minute}'</span>
                             </div>
                         </div>
-                        <div class="match-score">⚽ ${m.home_goals}-${m.away_goals}</div>
-                        <div class="xg-bar">
-                            <span class="xg-value">📈 xG:</span>
-                            <span style="flex:1;color:#94a3b8;font-weight:bold;">${m.home_xg} - ${m.away_xg}</span>
+                        
+                        <div class="match-score">⚽ ${match.home_goals}-${match.away_goals}</div>
+                        
+                        <div class="xg-display">
+                            <span>📈 xG: ${match.home_xg} - ${match.away_xg}</span>
                         </div>
+                        
                         <div class="confidence-badge">
-                            ${m.confidence}% Confidence
+                            ${match.confidence}% Confidence
                         </div>
-                        ${m.signals.map(s => `
+                        
+                        ${match.signals.map(signal => `
                             <div class="signal">
                                 <div class="signal-header">
-                                    <div class="signal-type">${s.type}</div>
-                                    <div class="signal-accuracy">📊 ${s.accuracy}%</div>
+                                    <div class="signal-type">${signal.type}</div>
+                                    <div class="signal-accuracy">📊 ${signal.accuracy}%</div>
                                 </div>
-                                <div class="signal-reason">${s.reasoning}</div>
-                                <div class="signal-algo">Algorithm: ${s.algorithm}</div>
+                                <div class="signal-reasoning">${signal.reasoning}</div>
+                                <div class="signal-algorithm">Algorithm: ${signal.algorithm}</div>
                             </div>
                         `).join('')}
                     </div>
-                `).join('') + '</div>';
+                `).join('') +
+            '</div>';
         }
     </script>
 </body>
