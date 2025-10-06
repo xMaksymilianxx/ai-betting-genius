@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 AI Betting Analyzer - Multi-Sport Intelligence</title>
+    <title>🧠 AI Betting Genius - Ultimate Multi-Sport</title>
     <style>
         * {
             margin: 0;
@@ -123,7 +123,8 @@
             border-color: rgba(255,255,255,0.6);
         }
 
-        .config-item select option {
+        .config-item select option,
+        .config-item select optgroup {
             background: #764ba2;
             color: #fff;
         }
@@ -332,9 +333,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 AI Betting Analyzer</h1>
+            <h1>🧠 AI Betting Genius</h1>
             <div class="subtitle">
-                Multi-Sport Intelligence • Self-Learning System • 12 Dimensions Analysis
+                Ultimate Multi-Sport Intelligence • 12 Sports • Self-Learning AI • Real-Time Analysis
             </div>
         </div>
 
@@ -348,8 +349,8 @@
                 <div class="value" id="analyzed">0</div>
             </div>
             <div class="stat-card">
-                <div class="label">Active Sources</div>
-                <div class="value" id="sources">3</div>
+                <div class="label">Active APIs</div>
+                <div class="value" id="sources">12</div>
             </div>
             <div class="stat-card">
                 <div class="label">Learning Status</div>
@@ -358,17 +359,31 @@
         </div>
 
         <div class="config-panel">
-            <h2 style="margin-bottom: 15px;">⚙️ Configuration Panel</h2>
+            <h2 style="margin-bottom: 15px;">⚙️ Ultimate Configuration Panel</h2>
             <div class="config-grid">
                 <div class="config-item">
-                    <label for="sport">Sport Type</label>
+                    <label for="sport">Sport Type (12 Available)</label>
                     <select id="sport">
-                        <option value="all">🌐 All Sports</option>
-                        <option value="football" selected>⚽ Football (Soccer)</option>
-                        <option value="basketball">🏀 Basketball</option>
-                        <option value="tennis">🎾 Tennis</option>
-                        <option value="hockey">🏒 Ice Hockey</option>
-                        <option value="volleyball">🏐 Volleyball</option>
+                        <option value="all">🌐 All Sports (Multi-API)</option>
+                        <optgroup label="⚽ Popular Sports">
+                            <option value="football" selected>⚽ Football (Soccer)</option>
+                            <option value="basketball">🏀 Basketball</option>
+                            <option value="nba">🏀 NBA</option>
+                            <option value="tennis">🎾 Tennis</option>
+                            <option value="hockey">🏒 Ice Hockey</option>
+                            <option value="volleyball">🏐 Volleyball</option>
+                        </optgroup>
+                        <optgroup label="🇺🇸 American Sports">
+                            <option value="nfl">🏈 American Football (NFL)</option>
+                            <option value="baseball">⚾ Baseball (MLB)</option>
+                        </optgroup>
+                        <optgroup label="🌍 Other Sports">
+                            <option value="handball">🤾 Handball</option>
+                            <option value="rugby">🏉 Rugby</option>
+                            <option value="afl">🏉 Australian Football (AFL)</option>
+                            <option value="mma">🥊 MMA / UFC</option>
+                            <option value="formula1">🏎️ Formula 1</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="config-item">
@@ -392,15 +407,36 @@
                     </select>
                 </div>
                 <div class="config-item">
-                    <label for="league">League Priority</label>
+                    <label for="league">League / Competition</label>
                     <select id="league">
-                        <option value="all" selected>All Leagues</option>
-                        <option value="top5">Top 5 Leagues Only</option>
-                        <option value="premier">Premier League</option>
-                        <option value="laliga">La Liga</option>
-                        <option value="bundesliga">Bundesliga</option>
-                        <option value="seriea">Serie A</option>
-                        <option value="ligue1">Ligue 1</option>
+                        <option value="all" selected>🌐 All Leagues & Competitions</option>
+                        <optgroup label="⚽ Top 5 European Leagues">
+                            <option value="top5">⭐ Top 5 Only (Big 5)</option>
+                            <option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+                            <option value="laliga">🇪🇸 La Liga</option>
+                            <option value="bundesliga">🇩🇪 Bundesliga</option>
+                            <option value="seriea">🇮🇹 Serie A</option>
+                            <option value="ligue1">🇫🇷 Ligue 1</option>
+                        </optgroup>
+                        <optgroup label="⚽ Other European">
+                            <option value="eredivisie">🇳🇱 Eredivisie</option>
+                            <option value="primeira">🇵🇹 Primeira Liga</option>
+                            <option value="championship">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
+                        </optgroup>
+                        <optgroup label="🏀 Basketball">
+                            <option value="nba">🏀 NBA</option>
+                            <option value="euroleague">🏀 EuroLeague</option>
+                            <option value="ncaa">🏀 NCAA</option>
+                        </optgroup>
+                        <optgroup label="🏈 American Sports">
+                            <option value="nfl">🏈 NFL</option>
+                            <option value="mlb">⚾ MLB</option>
+                        </optgroup>
+                        <optgroup label="🏆 International">
+                            <option value="ucl">⭐ Champions League</option>
+                            <option value="uel">🏆 Europa League</option>
+                            <option value="worldcup">🌍 World Cup</option>
+                        </optgroup>
                     </select>
                 </div>
             </div>
@@ -427,7 +463,6 @@
             learning: '🔄'
         };
 
-        // Load saved stats
         function loadStats() {
             const saved = localStorage.getItem('aiStats');
             if (saved) {
@@ -455,7 +490,7 @@
             btn.textContent = '🔄 Analyzing...';
 
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="loading">🧠 AI is analyzing live matches across multiple sports...</div>';
+            resultsDiv.innerHTML = '<div class="loading">🧠 AI analyzing live matches across 12 sports...</div>';
 
             try {
                 const config = {
@@ -486,7 +521,8 @@
                     resultsDiv.innerHTML = `
                         <div class="error">
                             <h3>⚠️ ${data.message || 'No matches available'}</h3>
-                            <p>${data.error || 'Try again in a few minutes when matches are live.'}</p>
+                            <p>${data.error || 'Try again later when matches are live.'}</p>
+                            <p style="margin-top: 10px; opacity: 0.8;">Best time: 15:00-22:00 CEST on match days</p>
                         </div>
                     `;
                 }
@@ -510,8 +546,8 @@
             if (!data.results || data.results.length === 0) {
                 resultsDiv.innerHTML = `
                     <div class="error">
-                        <h3>📭 No High-Confidence Signals Found</h3>
-                        <p>AI is learning from current matches. Try different filters or check back soon.</p>
+                        <h3>📭 No High-Confidence Signals</h3>
+                        <p>AI is learning. Try different filters or check back soon.</p>
                     </div>
                 `;
                 return;
@@ -564,7 +600,6 @@
             }
         });
 
-        // Initialize
         loadStats();
     </script>
 </body>
